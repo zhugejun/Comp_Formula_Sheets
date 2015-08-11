@@ -1,0 +1,432 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{latexsym, marvosym}
+\usepackage{pifont}
+\usepackage[sc]{mathpazo} % use mathpazo for math fonts
+\usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[bottom]{footmisc}
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\setlist[description]{leftmargin=0pt}
+\usepackage{xfrac}
+\usepackage[pdftex,
+            pdfauthor={Gejun Zhu},
+            pdftitle={Statistical Analysis Cheatsheet},
+            pdfsubject={One page both sides cheatsheet for statistics analysis comprehensive exam.},
+            pdfkeywords= {statistics} {cheatsheet} {pdf} {cheat} {sheet} {formulas}{equations}
+            ]{hyperref}
+\usepackage{relsize}
+\usepackage{rotating}
+
+ \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+    \def\independenT#1#2{\mathrel{\setbox0\hbox{$#1#2$}%
+    \copy0\kern-\wd0\mkern4mu\box0}} 
+            
+\newcommand{\noin}{\noindent}    
+\newcommand{\logit}{\textrm{logit}} 
+\newcommand{\var}{\textrm{Var}}
+\newcommand{\cov}{\textrm{Cov}} 
+\newcommand{\corr}{\textrm{Corr}} 
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Bern}{\textrm{Bern}}
+\newcommand{\Bin}{\textrm{Bin}}
+\newcommand{\Beta}{\textrm{Beta}}
+\newcommand{\Gam}{\textrm{Gamma}}
+\newcommand{\Expo}{\textrm{Expo}}
+\newcommand{\Pois}{\textrm{Pois}}
+\newcommand{\Unif}{\textrm{Unif}}
+\newcommand{\Geom}{\textrm{Geom}}
+\newcommand{\NBin}{\textrm{NBin}}
+\newcommand{\Hypergeometric}{\textrm{HGeom}}
+\newcommand{\Mult}{\textrm{Mult}}
+
+
+
+\geometry{top=.3in,left=.2in,right=.2in,bottom=.3in}
+
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+\setcounter{secnumdepth}{0}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TITLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+     \Large{\textbf{Statistical Analysis Cheatsheet}} \\
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ATTRIBUTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\scriptsize
+
+Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis comprehensive exam by using William Chen's \href{http://wzchen.com/probability-cheatsheet}{formula sheet template}. 
+
+\begin{center}
+    Last Updated \today
+\end{center}
+
+% Cheatsheet format from
+% http://www.stdout.org/$\sim$winston/latex/
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN CHEATSHEET
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%           Regression          %%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           \begin{align*} 
+%        ({\bf A} \cup {\bf B})^c \equiv {\bf A^c} \cap {\bf B^c} \\
+%        ({\bf A} \cap {\bf B})^c \equiv {\bf A^c} \cup {\bf B^c}
+%           \end{align*} 
+
+
+\section{Regression Analysis}\smallskip \hrule height 2pt \smallskip
+
+\subsection{Simple Linear Regression}
+    \begin{description}
+        \item[Model]: $Y_i = \beta_0 + \beta_1X_i + \epsilon_i$, $\epsilon_i \overset{iid}{\sim} N(0, \sigma^2)$, $Y_i\sim	N(\beta_0 + \beta_1X_i, \sigma^2)$. 
+        %\item[Properties of SLR]
+    \end{description}
+    $E_i = Y_i - \hat{Y}_i$, $\sum E_i = 0$, $\sum Y_i = \sum \hat{Y}_i$, $\sum X_iE_i = 0$, $\sum \hat{Y}_iE_i = 0$. \\
+    $B_1 = \frac{\sum_{i=1}^n (X_i-\bar{X})(Y_i-\bar{Y})}{\sum_{i=1}^n (X_i-\bar{X})^2} = \frac{S_{xy}}{S_{xx}}$, $S_{xy} = \sum XY - \frac{\sum X \sum Y}{n}$, $B_0 = \bar{Y} - B_1\bar{X}$. \\
+    $B_1 = \sum_{i=1}^n Y_i \frac{(X_i-\bar{X})}{\sum_{i=1}^n (X_i-\bar{X})^2} =\sum_{i=1}^n k_i Y_i $; $\sum	k_i=0$, $\sum k_ix_i=1$, $\sum	 k_i^2 = \frac{1}{S_{xx}}$. \\
+    $B_1 \sim	N(\beta_1, \frac{\sigma^2}{S_{xx}})$; $\frac{B_1 - \beta_1}{\sqrt{V(B_1)}}\sim N(0,1)$, $\frac{S_{B_1}^2}{V(B_1)} = \frac{MSE/S_{xx}}{\sigma^2/S_{xx}} = \frac{SSE}{(n-2)\sigma^2}$, \\
+    $\frac{SSE}{\sigma^2}\sim	\chi_{n-2}^2$ $\Rightarrow$ $\frac{B_1 - \beta_1}{S_{B_1}} = \frac{B_1 - \beta_1}{\sqrt{MSE/S_{xx}}} \sim T_{n-2}$, CI: $b_1 \pm t_{1-\alpha/2, n-2} \cdot s_{b_1}$; $\frac{SSR}{\sigma^2} \sim	\chi_{p-1}^2$. \\
+    Inference on $E(Y_h)$: $\hat{Y}_h = B_0 + B_1X_h $, $\hat{Y}_h \sim N(\beta_0 + \beta_1 X_h, \sigma^2[\frac{1}{n} + \frac{(X_h - \bar{X})^2}{S_{xx}}])$ \\
+    Prediction on a new observation: $\hat{y} \pm t_{1-\alpha/2, n-2}\sqrt{mse[1+\frac{1}{n}+\frac{(X_h - \bar{X})^2}{X_{xx}}]}$. \\
+    $SST = \sum	(Y_i - \bar{Y}_i)^2 = \sum	(Y_i - \hat{Y}_i)^2 + \sum	(\hat{Y}_i - \bar{Y}_i)^2 = SSE + SSR$\\
+    If $var(Y_i) = \sigma^2$, and $Y_i's$ are uncorrelated, then $Cov(\sum	a_iY_i, \sum	b_iY_i) = \sigma^2\sum a_ib_i$. \\
+    $B_1$ and $\bar{Y}$ are uncorrelated, $Cov(B_1, \bar{Y}) = 0$ because $Cov(B_1, \bar{Y}) = Cov(\sum k_i Y_i, \sum \frac{1}{n}Y_i) = \frac{\sigma^2}{n} \sum	k_i = 0$. \\
+     
+    
+    \begin{description}
+    \item[ANOVA Table] - Analysis of variance for simple linear regression \\
+        %\begin{table}[H]
+        \begin{center}
+            \begin{tabular}{r|cccc}
+                \textbf{Source}  & \textbf{SS} & \textbf{DF} & \textbf{MS} &\textbf{ Expected}  \\ \hline
+                \textbf{Regression} & SSR & 1 & MSR=SSR/1 & $\sigma^2 + \beta_1^2S_{xx}$\\
+                \textbf{Error} & SSE & n-2 & MSE=SSE/(n-2) & $\sigma^2$ \\
+                \textbf{Total} & SST &  n-1 &\  & \  \\
+            \end{tabular}
+        \end{center}
+\end{description}
+    Under $H_0: \beta_1=0$, $F^* = \frac{MSR}{MSE}\sim F_{1,n-2}$. $R^2 = \frac{SSR}{SST} = 1-\frac{SSE}{SST}$. $B_1 = r\sqrt{\frac{S_{yy}}{S_{xx}}}$. \\
+    E(MSR) = $\sigma^2 + \beta_1^2S_{xx}$, SSR = $B_1^2S_{xx}$, $E(MSE) = E(\frac{SSE}{n-2} = \frac{\sigma^2}{n-1}E(\frac{SSE}{\sigma^2}) = \sigma^2$\\
+    Studentized residuals: $E_i^* = \frac{E_i}{\sqrt{\hat{V(E_i)}}}$ 
+    
+%%% assumptions ...    
+    \begin{description}
+    \item[Assumptions]  - LINE
+    \begin{itemize}
+    		\item Linearity: No curvature in the residual plot; (high-order, log/square)
+    		\item Independence: $\epsilon_i \overset{iid}{\sim} N(0, \sigma^2)$;
+    		\item Normality of error: QQ plot; (GLM, poisson regression...)
+    		\item Equal Variance: standardized residual inside [-3, 3]. (weighted obs)
+    \end{itemize}
+    \end{description}
+
+
+%%% Simultaneous Inference and other topics
+%	\begin{description}
+%	\item[Simultaneous Inference] - Simultaneous Inference and Other Topics \\
+%	Bonferroni (family-wise): multiple p-values by g, the number of tests. \\ 
+%	Holm (family-wise): compare smallest p-value with $\alpha /g$; second smallest with $\alpha / (g-1)$; ...\\
+%	Regression through Origin: $B_1 = \frac{\sum Y_iX_i}{\sum X_i^2}$
+%	\end{description}	    
+    
+    
+    
+    \begin{description}
+    		\item[Matrix Approach] - Matrix form \\ %  \boldsymbol{}
+    		$\mathbf{Y_{n\times 1}} = X_{n\times p}\boldsymbol{\beta}_{p\times 1}+\boldsymbol{\epsilon}_{n\times 1}$, $\boldsymbol{\epsilon}\sim	MN(\textbf{0}, \sigma^2\textbf{I})$. $\boldsymbol{\beta} = (X'X)^{-1}X'\boldsymbol{Y}$. \\
+    		$\boldsymbol{Y} \sim MN(\mu, \sum)$, then $A\boldsymbol{Y} + \boldsymbol{b} \sim MN(A\mu+b, A\sum A')$. \\
+    		$\boldsymbol{B}\sim \boldsymbol{MN}(\boldsymbol{\beta}, \sigma^2(X'X)^{-1})$, $\boldsymbol{\hat{Y}} = X\textbf{B} = H\boldsymbol{Y}\sim MN(X\boldsymbol{\beta}, \sigma^2H)$, $H=X(X'X)^{-1}X'$.\\
+    		$S^2(\boldsymbol{B}) = MSE(X'X)^{-1}$; $\boldsymbol{E} = \boldsymbol{Y} - \boldsymbol{\hat{Y}} = (I - H)\boldsymbol{Y} \sim	MN(\boldsymbol{0}, \sigma^2(I-H))$.\\
+    		$\sum Y_i^2 = \boldsymbol{Y}'J\boldsymbol{Y}$, $SSTO = \boldsymbol{Y}'(I - \frac{1}{n}J)\boldsymbol{Y}$, $SSE = \boldsymbol{Y}'(I-H)\boldsymbol{Y}$, $SSR = \boldsymbol{Y}'(H-\frac{1}{n}J)\boldsymbol{Y}$.\\
+    		$\hat{Y} = HY$, $\hat{Y}' = Y'H$, $0 = \sum \hat{Y}_iE_i = \sum \hat{Y}_i Y_i - \sum \hat{Y}_i^2$. \\
+    		Distribution of $\hat{Y}_h$: $\hat{Y}_h = \boldsymbol{X_h'B}\sim MN(\boldsymbol{X_h'\beta}, \sigma^2\boldsymbol{X_h'}(X'X)^{-1}\boldsymbol{X_h})$ \\
+    		$S^2(\hat{Y_h}) = MSE(\boldsymbol{X}_h'(X'X)^{-1}\boldsymbol{X}_h)$ \\
+    		$pred = Y_{h(new)} - \hat{Y}_h$, $pred \sim N(0, \sigma^2(1 + \boldsymbol{X}_{h(new)}'(X'X)^{-1}\boldsymbol{X}_{h(new)}))$
+    		
+    \end{description}
+    
+%%%%%%%%%%%%%%%    
+    \begin{description}
+    		\item[Multiple Regression] - Multiple regression \\ %  \boldsymbol{}
+    		$\boldsymbol{Y} = X\beta+\boldsymbol{\epsilon}$, where $\epsilon \sim MN(\boldsymbol{0}, \sigma^2I)$. \\    		
+		\underline{\textit{FWER}} - Bonferroni and Holm. Bonferroni: compare p-value with $\alpha / g$; Holm: sort p-values and multiple g, g-1, ..., 1 in order and compare with $\alpha$ finally. \\
+		$SSTo = SSR(X_1) + SSE(X_1) = SSR(X_1, X_2) + SSE(X_1, X_2)$, where $SSR(X_1, X_2) = SSR(X_1) + SSR(X_2|X_1)$, $SSE(X_1,  X_2) = SSE(X_2) - SSR(X_1|X_2)$.\\
+		In general,  $SSR(X_q, X_{q+1},..., X_{p-1}|X_1, X_2,...,X_{q-1}) = SSE(X_1, X_2,...,X_{q-1}) - SSE(X_1, X_2, ...,X_{p-1}) = SSE_R - SSE_F$.\\
+		\underline{Partial F-test}: $H_0: \beta_q = \beta_{q+1} = ... = \beta_{p-1} = 0$, $H_a$: At least one $\beta_k \neq 0,\ k = q, q+1, .., p-1$. Test statistic $F^* = \dfrac{\frac{SSE_R - SSE_F}{df_R - df_F}}{MSE_F} = \dfrac{\frac{SSR(X_q, X_{q+1}, ..., X_{p-1} | X_1, X_2, ..., X_{q-1})}{p-q}}{\frac{SSE(X_1, X_2, ..., X_{p-1})}{n-p}} $. If $H_0$ is true, then $F^* \sim F_{p-q, n-p}$.\\
+		\underline{\textit{coefficient of partial determination}} is the proportion of the variation in Y "explained" by an indep. variable when other indep. variables are in the model. \\
+		$R_{Y1|2}^2 = \frac{SSE(X_2) - SSE(X_1, X_2)}{SSE(X_2)} = \frac{SSR(X_1|X_2)}{SSE(X_2)} = 1 - \frac{SSE(X_1, X_2)}{SSE(X_2)}$ \\
+		$R_{Y1|2,3,4} = 1 - \frac{SSE(X_1, X_2, X_3, X_4)}{SSE(X_2, X_3, X_4)}$\\
+		\underline{\textit{multicollinearity diagnostic}}: Variance Inflation Factor (VIF) = $(1 - R_k^2)^{-1}$, where $R_k^2=$ coefficient of determination when $X_k$ is regressed upon other predictors. If $VIF>1$, variance of $B_k$ is inflated due to correlations b/w $X_k$ and other predictors. 	If $X_k$ is uncorrelated with other predictors, then $R_k^2 = 0$ and $VIF_k = 1$. \\ 
+		
+		
+    		
+    \end{description}    
+    
+    
+%%%%%%%%%%%%%%%%
+%      \underline{\textit{}}
+\begin{description}
+	\item[Model Diagnostics] - More about model diagnostics\\
+	\underline{\textit{Added-variable Plots}} (1) regress Y on predictors except $X_k$ and obtain the residuals; (2) regress $X_k$ on other predictors and obtain residuals; (3) plot (1) vs (2);\\
+	\underline{\textit{Leverage}}: A measure of how unusual an X is. (diagonal values of Hat matrix, $\sum h_{ii} = tr(H) = tr[X(X'X)^{-1}X'] = tr[X'X(X'X)^{-1}] = tr[I_{p\times p}] = p$) \\
+	\underline{\textit{Influence}}: An influence point is its exclusive causes substantial changes to the fitted data. Just because a point has high leverage doesn't mean it has high influence. \\
+	Measures of influence include: \\
+	$DFFITS_i = \frac{\hat{Y}_i - \hat{Y}_i(i)}{\sqrt{MSE_{(i)}h_{ii}}}$ \\
+	Cook's Distance = $\frac{e_i^2}{pMSE}[\frac{h_{ii}}{(1-h_{ii})^2}]$ \\
+	$DFBETAS_{k(i)} = \frac{b_k - b_{k(i)}}{\sqrt{MSE_{(i)}c_{kk}}}$ where $c_{kk}$ is  $(k+1)^{th}$ diagonal in $(X'X)^{-1}$.
+	
+\end{description}
+    
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Design of experiments   %%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Design of experiments} \smallskip \hrule height 2pt \smallskip
+
+\subsection{CRD with one factor}
+\begin{description}
+    \item[Model] one factor with $a\geq 2$ levels. $H_0: \mu_1 = \mu_2, ..., = \mu_a$ or $\hat{\tau_i} = 0$.
+    \begin{itemize}
+         \item $y_{ij} = \mu + \tau_i + \epsilon_{ij}, i=1,2,...,a, j=1,2,...,n_j$, $\epsilon_{ij}\sim N(0,\sigma^2)$;
+    		\item LSE estimator $\hat{\mu} + \hat{\tau}_i = \bar{y}_{i.}$,  if $\sum n_i\hat{\tau}_i = 0$ or $\hat{\mu = 0}$ or $\hat{\tau}_a=0$;
+    		\item $MS_{trt} = \frac{SS_{trt}}{a-1} =\frac{\sum_{i=1}^a n_i (\bar{y}_i - \bar{y}_{..})^2}{a-1}$, $MS_E = \frac{SSE}{N-a} = \frac{\sum_{i=1}^a \sum_{j=1}^{n_i} (y_{ij} - \bar{y}_{i.})}{N-a}$;
+    		\item $E(MS_E)=\sigma^2$, $E(MS_{trt}) = \sigma^2 + \frac{\sum_{i=1}^a n_i \tau_i^2}{a-1}$, $S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}$;
+    		\item $SS_T = \sum_{i=1}^a \sum_{j=1}^{n_i} y_{ij}^2 - \frac{(y_{..})^2}{N}$, $SS_{trt} = \sum_{i=1}^a \frac{y_i^2}{n_i} - \frac{(y_{..})^2}{N}$;
+    		\item Fact: Under $H_0$, $SSE/\sigma^2 \sim \chi_{N-a}^2$, $SS_{trt}/\sigma^2 \sim \chi_{a-1}^2$, independent;
+    		\item $\frac{SS_{trt}/(a-1)\sigma^2}{SS_{E}/(N-a)\sigma^2} \sim F_{a-1, N-a}$; rej  $F_0 > F(\alpha, a-1, N-a)$,  $p = P(F_{a-1, N-a} > F_0)$;
+    		\item $E(\bar{y}_{i.}) = \mu_i$, $V(\bar{y}_{i.})=\sigma^2/n_i$, $\frac{\bar{y}_{i.} - \mu_i}{\sqrt{MSE/n_i}}\sim T_{N-a}$;
+    		\item CI: $\bar{y}_{i.} \pm t_{\alpha /2, N-a}\sqrt{MSE/n_i}$, $\bar{y}_{s.} - \bar{y}_{t.} \pm t_{\alpha /2, N-a}\sqrt{MSE/n_s+MSE/n_t}$.
+    		\item Linear contrasts: $\Gamma = \sum c_i\mu_i$, $C = \sum c_i\hat{y}_{i.}$ with $\sum c_i = 0$. $E(C)=\Gamma$, $V(C) = \sigma^2\sum \frac{c_i^2}{n_i}$. CI: $\sum c_i\hat{y}_{i.} \pm t_{\alpha /2, N-a}\sqrt{MSE\sum \frac{c_i^2}{n_i}}$, $t=\frac{\sum c_i\hat{y}_{i.} - c}{\sqrt{MSE\sum \frac{c_i^2}{n_i}}}$.
+    \end{itemize}
+    \end{description}
+    
+    \begin{description}
+    \item[ANOVA Table] Analysis of variance for three factor fixed effects model. \\
+        %\begin{table}[H]
+        \begin{center}
+            \begin{tabular}{r|cc}
+                \textbf{Source}  & \textbf{DF} & \textbf{Expected Mean Square}  \\ \hline
+                \textbf{A} & $a-1$ & $\sigma^2+\frac{bcn\sum\tau_i^2}{a-1}$ \\
+                \textbf{AB} & $(a-1)(b-1)$ & $\sigma^2+\frac{cn\sum\sum(\tau\beta)_{ij}^2}{(a-1)(b-1)}$ \\
+                \textbf{ABC} & $(a-1)(b-1)(c-1)$ & $\sigma^2+\frac{n\sum\sum\sum(\tau\beta\gamma)_{ijk}^2}{(a-1)(b-1)(c-1)}$ \\
+                \textbf{Error} & $abc(n-1)$ & $\sigma^2$ \\
+            \end{tabular}
+        \end{center}
+    
+\end{description}
+
+
+\subsection{Basic Blocking Designs}
+	\begin{description}
+		\item[Model] two factors - the treatment factor $\tau_i$ and the block factor $\beta_j$. \\
+		$Y_{ij} = \mu + \tau_i + \beta	_j + \epsilon_{ij}, i = 1,2,...,a, j = 12,...,b$. ($\sum \tau_i = 0$ and $\sum \beta_j = 0$)\\
+		$H_0: \tau_0 = \tau_1 = ... = \tau_a = 0$ or $\mu_1 = \mu_2 = ... = \mu_a$, $H_a: Not\ H_0$ (at least two means differs) . $E(\bar{Y_{i.}}) = \mu + \tau_i$\\%, $df(Blocks) = b-1$, $df(Error) = N-a-b+1$ \\ 
+		%$SS_{T} = \sum \sum y_{ij}^2 - \frac{y_{..}^2}{N}$, $SS_{trt} = \sum \frac{y_{i.}^2}{b} - \frac{y_{..}^2}{N}$, $SS_{blk} = \sum \frac{y_{.j}^2}{a} - \frac{y_{..}^2}{N}$ \\
+		%$E(MS_{trt}) = \sigma^2 + \frac{b\sum \tau_i^2}{a-1}$, $E(MS_{blk}) = \sigma^2 + \frac{a \sum \beta_j^2}{b-1}$, $E(MSE) = \sigma^2$\\
+		%$F_0 = MSE/MS_{trt}$, p-value = $P(F_{a-1, (a-1)(b-1)} > F_0)$.\\
+		A balanced incomplete block design (BIBD) includes a treatment factor with $a$ levels, a blocking factor with  $b$ levels, each block includes $k$ experimental units, which implies a total of $bk$ runs. This means that each treatment occurs $r = bk/a$ times. Each treatment occurs either 0 or 1 times, and each pair of treatments occurs together in a block exactly $\lambda$ times.  $N = bk$. (1) $ar = bk$; (2) $r(k-1) = \lambda (a-1)$; (3) $b\geq a$. \\
+		    \begin{center}
+            \begin{tabular}{r|cc}
+                \textbf{Source}  & \textbf{DF} & \textbf{Sum of Squares}  \\ \hline
+                \textbf{Treatments} & $a-1$ & $\sum_i \frac{y_{i.}^2}{b} - \frac{y_{..}^2}{N}$ \\
+                \textbf{Blocks} & $b-1$ & $\sum_j \frac{y_{.j}^2}{a} - \frac{y_{..}^2}{N}$ \\
+                \textbf{Error} & $N-a-b+1$ & $SS_{total} - SS_{trts} - SS_{blocks}$ \\
+                \hline
+                \textbf{Total} & $N-1$ & $\sum \sum y_{ij}^2 - \frac{y_{..}^2}{N}$ \\
+            \end{tabular}
+        \end{center}
+        $E(MS_{trt}) = \sigma^2 + \frac{b\sum \tau_i^2}{a-1}$, $E(MS_{blk}) = \sigma^2 + \frac{a \sum \beta_j^2}{b-1}$, $E(MSE) = \sigma^2$\\
+        $F_0 = MSE/MS_{trt}$, p-value = $P(F_{a-1, (a-1)(b-1)} > F_0)$.\\
+        $Q_i = y_{i.} - \dfrac{1}{k} \sum_j n_{ij}y_{.j}$, $\hat{\tau_i} = \dfrac{kQ_i}{\lambda a}$, $\hat{\mu} = \dfrac{y_{..}}{N} = \dfrac{y_{..}}{bk}$, $LSMean(\mu_i) = \hat{\mu} + \hat{\tau}_i$
+	\end{description}
+	
+	
+\subsection{$2^k$ Factorial Designs}
+	\begin{description}
+	\item[Model] $Y_{ijk} = \mu + \tau_i + \beta_j + (\tau \beta)_{ij} + \epsilon_{ijk}, \ i = 1,2,...,a, j = 1,2,..., b, k = 1,2, ..., n$\\
+	$\sum \tau = 0$, $\sum	\beta = 0$, $\sum_i (\tau \beta)_{ij}  = 0$, $\sum_j (\tau \beta)_{ij}  = 0$ \\ 
+	$\hat{\mu} = \bar{y}_{...}$, $\hat{\tau}_i = \bar{y}_{i..} - \bar{y}_{...}$, $\hat{\beta}_j = \bar{y}_{.j.} - \bar{y}_{...}$, $\hat{\tau \beta}_{ij} = \bar{y}_{ij.} - \bar{y}_{i..} - \bar{y}_{.j.} + \bar{y}_{...}$\\
+	Overall test: $\mu_{11} = \mu_{12} = ... = \mu_{ab}$, test statistic $F_0 = \frac{MS_{trt}}{MSE}$; \\
+	Interaction test: $(\alpha\beta)_{ij} = 0$ for all $ij$, test statistic $F_0 = \frac{MS_{AB}}{MSE}$.
+	
+	\end{description}
+
+\subsection{Two-level Fractional Factorial Designs}
+\begin{description}
+\item[Design resolution]- A fractional factorial design's resolution is the length of the shortest word and its defining relation. \\
+$2^{k-p}$ terms, $2^p$ alias.\\
+
+\end{description}
+
+%\subsection{RSM}
+
+\subsection{Random Effects and Mixed Models}
+\begin{description}
+\item[Model] $Y_{ij} = \mu + \tau_i + \epsilon_{ij},\ i = 1,2,...,a; j = 1, 2,..., n_i$, where $\tau_i$  are assumed to be independent $N(0, \sigma_{\tau}^2)$ random variables. \\ 
+$H_0: \sigma_{\tau}^2 = 0$ vs. $H_a: \sigma_{\tau}^2 > 0$, test stat: $F_0 = \frac{MS_{trt}}{MSE}$, $F_0 \sim F_{a-1,N-a}$ under $H_0$. \\
+\underline{Some facts}: $Y_{ij} \sim N(\mu , \sigma_{\tau}^2+\sigma^2)$ (1) if $i\neq k$ - different treatment levels, $Cov(Y_{ij}, Y_{kj}) = 0$ since $\tau_i$ and $\tau_k$ are independent and $E(\tau_i\tau_k) = E(\tau_i)E(\tau_k) = 0$; (2) if $k \neq l$ - same treatment different obs, $Cov(Y_{ij}, Y_{kj}) = \sigma_{\tau}^2$. \\
+$E(MSE) = \sigma^2$, $E(MS_{trt}) = \sigma^2 + n_0\sigma_{\tau}^2$ where $n_0 = n$ if all $n_i = n$ and $n_0 = \frac{1}{a-1}[N-\frac{\sum n_i^2}{N}]$.\\
+Estimates: $\hat{\sigma}^2 = MSE$ and $\hat{\sigma}_{\tau}^2 = \frac{MS_{trt} - MSE}{n_0}$.\\
+Confidence interval for $\frac{\sigma_{\tau}^2}{\sigma_{\tau}^2 + \sigma^2}$: $\frac{MS_{trts} / (n\sigma_{\tau}^2 + \sigma^2)}{MS_E / \sigma^2} \sim F_{a-1,N-a}$, $(F_{1-\alpha/2, a-1, N-a} \leq \frac{MS_{trts}}{MS_E} \frac{\sigma^2}{n\sigma_{\tau}^2 + \sigma^2} \leq F_{\alpha /2, a-1, N-a}) = 1 - \alpha$, $P(L\leq \frac{\sigma_{\tau}^2}{\sigma^2} \leq U) = 1-\alpha$, $L = \frac{1}{n} (\frac{MS_{trts}}{MS_E} \frac{1}{F_{\alpha/2, a-1, N-a}} - 1)$, $U = \frac{1}{n} (\frac{MS_{trts}}{MS_E} \frac{1}{F_{1 - \alpha/2, a-1, N-a}} - 1)$, $\frac{L}{L+1} \leq \frac{\sigma_{\tau}^2}{\sigma_{\tau}^2 + \sigma^2} \leq \frac{U}{1+U}$\\
+\underline{Two-factor factorial with random factors}: $Y_{ijk} = \mu + \tau_i + \beta_j + (\tau \beta)_{ij} + \epsilon_{ijk}$,  $i = 1,2,...,a$, $j = 1,2,...,b$, $k = 1,2,...,n$, $V(\tau_i) = \sigma_{\tau}^2$, $V(\beta_j) = \sigma_{\beta}^2$, $V[(\tau \beta)_{ij}] = \sigma_{\tau \beta}^2$, and $V(\epsilon) = \sigma^2$. \\
+Expected mean squares: $E(MS_A) = \sigma^2 + n\sigma_{\tau \beta}^2 + bn\sigma_{\tau}^2$; $E(MS_B) = \sigma^2 + n\sigma_{\tau \beta}^2 + an\sigma_{\beta}^2$; $E(MS_{AB}) = \sigma^2 + n\sigma_{\tau \beta}^2$; $E(MSE) = \sigma^2$.\\
+\underline{Two-factor mixed model}: Factor A is fixed; factor B is random. $Y_{ijk} = \mu + \tau_i + \beta_j + (\tau \beta)_{ij} + \epsilon_{ijk}$, where
+\begin{itemize}
+	\item $i = 1,2,...,a$, $j = 1,2,...,b$, $k = 1,2,...,n$;
+	\item $\tau_i$ is a fixed effect with $\sum \tau_i = 0$;
+	\item  $\beta_j \sim N(0, \sigma_\beta ^2)$, $(\tau\beta)_{ij} \sim N(0, \sigma_{\tau\beta}^2)$, and $\epsilon_{ijk} \sim N(0, \sigma^2)$.
+\end{itemize}
+ $Y_{ijk} \sim N(\mu + \tau_i, \sigma^2 + \sigma_\beta	^2 + \sigma_{\tau\beta}^2)$. \\
+Expected mean squares: $E(MSE) = \sigma^2$, $E(MS_A) = \sigma^2 + n\sigma_{\tau\beta}^2 + bn\frac{\sum \tau_i}{a-1}$, $E(MS_B) = \sigma^2 + n\sigma_{\tau\beta}^2 + an\sigma_\beta^2$, $E(MS_{AB}) = \sigma^2 + n\sigma_{\tau\beta}^2$\\
+Variance components estimates: $\hat{\sigma}^2 = MSE$, $\hat{\sigma}_{\tau\beta}^2 = \frac{MS_{AB} - MSE}{n}$, $\hat{\sigma}_{\beta}^2 = \frac{MS_{B} - MS_{AB}}{an}$ \\
+Hypothesis Tests: (1) $H_0: \sigma_{\tau\beta}^2 = 0$ vs. $H_a: \sigma_{\tau\beta}^2 > 0$ using $F = \frac{MS_{AB}}{MSE}$; (2) $H_0: \sigma_{\beta}^2 = 0$ vs. $H_a: \sigma_{\beta}^2 > 0$ using $F = \frac{MS_{B}}{MS_{AB}}$; (3) $H_0: \tau_i = 0$ vs. $H_a: not\ H_0$ using $F = \frac{MS_{A}}{MS_{AB}}$. \\
+Approximate F-test: degree of freedom $\nu = \frac{(\sum c_i MS_i)^2}{\sum \frac{c_i^2 MS_i^2}{\nu_i}}$
+\end{description}
+
+\subsection{Nested Designs}
+
+\begin{description}
+\item[Model] $Y_{ijk} = \mu + \tau_i + \beta_{j(i)} +  \epsilon_{ijk},\ i = 1,2,...,a; j = 1, 2,...,b, k= 1,2,...,n$. \\
+A random; B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 + \sigma_\tau^2$ if $i=m, j=n, k\neq o$; $Cov(Y_{ijk}, Y_{mno}) =  \sigma_\tau^2$ if $i=m, j\neq n$; $Cov(Y_{ijk}, Y_{mno}) = 0$ if $i\neq m$; \\
+A fixed; B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 $ if $i=m, j=n$; $0$ otherwise.
+\end{description}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%   General linear models   %%%
+%%%%%%%%%%%%%%%%%%%%%%%
+\section{Generalized Linear Models}\smallskip \hrule height 2pt \smallskip
+\subsubsection*{Textbook 1}
+\begin{enumerate}
+\item \noindent An othognoal matrix $C_{k\times k}$ has the property $C'C=CC'=I$,
+i.e. $C'=C^{-1}$. The eigenvalues of $A_{k\times k}$ are the same
+as $C'AC$. 
+\item \noindent $P$ and $Q$ are nonsingular, then $rank\left(AQ\right)=rank\left(PA\right)=rank\left(A\right)$. 
+\item \noindent $A{}_{n\times n}$, symmetric, then $\textbf{x}_{i}'\textbf{x}_{j}=0$
+for $i\ne j$. $P_{n\times n}$ nonsingular, then $Tr\left(P^{-1}AP\right)=Tr\left(A\right)$. 
+\item \noindent $A{}_{n\times n}$, symmetric, then $A$ can be factorized
+as $A=P\textbf{\ensuremath{\Lambda}}P^{-1}$, where $\textbf{\ensuremath{\Lambda}}_{ii}=\lambda_{i}$,
+$P$ is an orthogonal matrix, i.e. $PP'=I$.
+\item \noindent $A{}_{n\times n}$, symmetric, idempotent, then $r\left(A\right)=tr\left(A\right)=r\left(P'AP\right)=tr\left(P'AP\right)$. 
+\item $z=a'Y$, $\frac{\partial z}{\partial Y}=a$; $z=Y'Y$, $\frac{\partial z}{\partial Y}=2Y$;
+$z=Y'AY$, $\frac{\partial z}{\partial Y}=AY+A'Y$.
+\item $E\left(Y\right)=\mu$, $E\left(a'Y\right)=a'E\left(Y\right)=a'\mu$;
+$V\left(Y\right)=V$, $V\left(a'Y\right)=a'V\left(Y\right)a$, $V\left(AY\right)=AV\left(Y\right)A'$.
+\item $E\left(Y'AY\right)=tr\left(AV\right)+\mu'A\mu$.
+\item If $Y_{k\times1}\sim N\left(\mu,I\right)$, then $Y'Y\sim\chi_{k,\lambda=\frac{1}{2}\left(\mu'\mu\right)}^{2}$.
+\item $Y_{n\times1}\sim N\left(\mu,I\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$
+with $k=r\left(A\right),$ $\lambda=\frac{1}{2}\left(\mu'A\mu\right)$
+iff $A=A^{2}$.
+\item $Y_{n\times1}\sim N\left(\mu,\sigma^{2}I\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$
+with $k=r\left(A\right),$ $\lambda=\frac{1}{2\sigma^{2}}\left(\mu'A\mu\right)$
+iff $A=A^{2}$.
+\item $Y_{n\times1}\sim N\left(\mu,V\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$
+with $k=r\left(AV\right)=r\left(A\right),$ $\lambda=\frac{1}{2}\left(\mu'A\mu\right)$
+iff $AV=\left(AV\right)^{2}$.
+\item $Y_{n\times1}\sim N\left(\mu,V\right)$, then $Y'V^{-1}Y\sim\chi_{k,\lambda}^{2}$,
+with $k=n,\ \lambda=\frac{1}{2}\left(\mu'V^{-1}\mu\right)$.
+\item $Y_{n\times1}\sim N\left(\mu,V\right)$, then $AY$ and $BY$ are
+independent iff $AVB'=0$.
+\item $Y_{n\times1}\sim N\left(\mu,V\right)$, $A_{n\times n}=A'$, $B_{m\times n}$,
+then $Y'AY$ and $BY$ are independent iff $BVA=0$.
+\item $Y_{n\times1}\sim N\left(\mu,V\right)$, $A_{n\times n}=A'$, $B_{n\times n}=B'$,
+then $Y'AY$ and $Y'BY$ are independent iff $AVB=0$.
+\item $B=\left(X'X\right)^{-1}XY$, $\hat{Y}=XB=X\left(X'X\right)^{-1}XY=HY$,
+$E\left(B\right)=\beta$, $var\left(B\right)=\sigma^{2}\left(X'X\right)^{-1}$,
+$E\left(\hat{Y}\right)=X\beta$, $var\left(\hat{Y}\right)=\sigma^{2}H$.
+\item $SSE=Y'\left(I-H\right)Y$ with $df=n-p$, $SSR=Y'\left(H-\frac{1}{n}J\right)Y$
+with $df=p-1$ , $SST=Y'\left(I-\frac{1}{n}\right)Y$ with $df=n-1$. 
+\item If $Y=X\beta+\epsilon$, $\epsilon\sim N\left(0,\sigma^{2}I\right)$,
+then $B=\left(X'X\right)^{-1}XY\sim N\left(\beta,\sigma^{2}\left(X'X\right)^{-1}\right)$. 
+\item $\dfrac{\left(n-p\right)s^{2}}{\sigma^{2}}=\dfrac{\left(n-p\right)MSE}{\sigma^{2}}=\dfrac{SSE}{\sigma^{2}}=\dfrac{1}{\sigma^{2}}Y'\left(I-H\right)Y\sim\chi_{n-p}^{2}$.
+\item $B$ and $\dfrac{SSE}{\sigma^{2}}$ are independent. 
+\item $\dfrac{b_{j}-\beta_{j}}{\sqrt{var\left(b_{j}\right)}}=\dfrac{b_{j}-\beta_{j}}{\sigma\sqrt{c_{jj}}}\sim N\left(0,1\right)$
+,$c_{jj}$ is $jth$ diag entry of $\left(X'X\right)^{-1}$.
+\item $\dfrac{\left(b_{j}-\beta_{j}\right)/\left(\sigma\sqrt{c_{jj}}\right)}{\sqrt{\frac{SSE}{\sigma^{2}}/\left(n-p\right)}}\sim t_{n-p}$ $\Rightarrow$ $b_{j}\pm t_{n-p}\sqrt{MSEc_{xx}}$
+\item $LB\sim N\left(L\beta,\sigma^{2}L\left(X'X\right)^{-1}L'\right)$.
+\item Let $M=\left(LB\right)'\left(\sigma^{2}\left(L\left(X'X\right)^{-1}L'\right)^{-1}\right)^{-1}\left(LB\right)\sim\chi_{r,\lambda}^{2}$,
+where $\lambda=\dfrac{1}{2\sigma^{2}}\left(LB\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(LB\right)$.
+\item $E\left(M\right)=r\sigma^{2}+\left(L\beta\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(L\beta\right)$
+\item $F^{*}=\dfrac{\left(Lb\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(Lb\right)/r}{\frac{SSE}{\sigma^{2}}/\left(n-p\right)}=\dfrac{MSQ}{MSE}\sim F_{r,n-p}$
+under $H_{0}:L\beta=0$.
+\item $\dfrac{SSR}{\sigma^{2}}\sim\chi_{p,\lambda}^{2}$, where $\lambda=\dfrac{1}{2\sigma^{2}}\beta'\left(X'X\right)\beta$.
+\item $MSQ\left(L\beta\right)=\left(LB\right)'\left(\sigma^{2}\left(L\left(X'X\right)^{-1}L'\right)^{-1}\right)^{-1}\left(LB\right)=\dfrac{SSR}{\sigma^{2}}$.
+\item $A=X\left(X'X\right)^{-1}X'-X_{2}\left(X_{2}'X_{2}\right)^{-1}X_{2}'$
+is idempotent; $r\left(A\right)=r$.
+\end{enumerate}
+
+\subsubsection*{Textbook 2}
+\begin{enumerate}
+\item standardized residual $r_{i}=\dfrac{y_{i}-\hat{\mu}_{i}}{\hat{\sigma}}$.
+\item $f\left(y;\theta\right)=exp\left\{ a\left(y\right)b\left(\theta\right)+c\left(\theta\right)+d\left(y\right)\right\} $
+\item glm = exp family + link func (mono + diff)
+\item $E\left[a\left(y\right)\right]=-c'\left(\theta\right)/b\left(\theta\right)$
+\item $var\left[a\left(y\right)\right]=\dfrac{b''\left(\theta\right)c'\left(\theta\right)-c''\left(\theta\right)b'\left(\theta\right)}{\left[b'\left(\theta\right)\right]^{3}}$
+\item score info: $U=\frac{\partial l\left(\theta;y\right)}{\partial\theta}=a\left(y\right)b'\left(\theta\right)+c'\left(\theta\right)$
+\item $E\left(U\right)=0;$ $J=var\left(U\right)=-E\left(U'\right)=\dfrac{b''\left(\theta\right)c'\left(\theta\right)}{b'\left(\theta\right)}-c''\left(\theta\right)$
+\item $\dfrac{U-0}{\sqrt{J}}\sim N\left(0,1\right)$, $U'J^{-1}U=\dfrac{U^{2}}{J}\sim\chi^{2}\left(1\right)$
+\item wald statistic $\left(b-\beta\right)'J\left(b\right)\left(b-\beta\right)\sim\chi^{2}\left(p\right)$
+\item $\lambda=\dfrac{L\left(b_{max};y\right)}{L\left(b;y\right)}$, $b_{max}$/b,
+- MLE for saturated/reduced model
+\item $D=2\left[l\left(b_{max};y\right)-l\left(b;y\right)\right]$
+\item $AIC=-2l\left(\hat{\pi};y\right)+2p$; $BIC=-2l\left(\hat{\pi};y\right)+2p\times\left(\#\text{of obs}\right)$\end{enumerate}
+
+\end{multicols}
+
+\end{document}

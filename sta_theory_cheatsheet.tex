@@ -1,0 +1,291 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{latexsym, marvosym}
+\usepackage{pifont}
+\usepackage[sc]{mathpazo} % use mathpazo for math fonts
+\usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[bottom]{footmisc}
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\setlist[description]{leftmargin=0pt}
+\usepackage{xfrac}
+\usepackage[pdftex,
+            pdfauthor={Gejun Zhu},
+            pdftitle={Statistical Analysis Cheatsheet},
+            pdfsubject={One page both sides cheatsheet for statistics analysis comprehensive exam.},
+            pdfkeywords= {statistics} {cheatsheet} {pdf} {cheat} {sheet} {formulas}{equations}
+            ]{hyperref}
+\usepackage{relsize}
+\usepackage{rotating}
+
+ \newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+    \def\independenT#1#2{\mathrel{\setbox0\hbox{$#1#2$}%
+    \copy0\kern-\wd0\mkern4mu\box0}} 
+            
+\newcommand{\noin}{\noindent}    
+\newcommand{\logit}{\textrm{logit}} 
+\newcommand{\var}{\textrm{Var}}
+\newcommand{\cov}{\textrm{Cov}} 
+\newcommand{\corr}{\textrm{Corr}} 
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Bern}{\textrm{Bern}}
+\newcommand{\Bin}{\textrm{Bin}}
+\newcommand{\Beta}{\textrm{Beta}}
+\newcommand{\Gam}{\textrm{Gamma}}
+\newcommand{\Expo}{\textrm{Expo}}
+\newcommand{\Pois}{\textrm{Pois}}
+\newcommand{\Unif}{\textrm{Unif}}
+\newcommand{\Geom}{\textrm{Geom}}
+\newcommand{\NBin}{\textrm{NBin}}
+\newcommand{\Hypergeometric}{\textrm{HGeom}}
+\newcommand{\Mult}{\textrm{Mult}}
+
+
+
+\geometry{top=.3in,left=.2in,right=.2in,bottom=.3in}
+
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+\setcounter{secnumdepth}{0}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+\begin{multicols}{3}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TITLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+     \Large{\textbf{Statistical Theory Cheatsheet}} \\
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ATTRIBUTIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\scriptsize
+
+Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the theory comprehensive exam by using William Chen's \href{http://wzchen.com/probability-cheatsheet}{formula sheet template}. 
+
+\begin{center}
+    Last Updated \today
+\end{center}
+
+% Cheatsheet format from
+% http://www.stdout.org/$\sim$winston/latex/
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN CHEATSHEET
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%           Regression          %%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           \begin{align*} 
+%        ({\bf A} \cup {\bf B})^c \equiv {\bf A^c} \cap {\bf B^c} \\
+%        ({\bf A} \cap {\bf B})^c \equiv {\bf A^c} \cup {\bf B^c}
+%           \end{align*} 
+
+\section{Probability and Distributions} \smallskip \hrule height 1pt \smallskip
+\begin{description}
+	\item[Section 1] - probability and distributions \\
+	Let $X$ be a continuous random variable with $pdf\ f_X(x)$ and support $S_X$. Let $Y=g(X)$, where $g(x)$ is a one-to-one differentiable function, on the support of $X$, $S_X$. Then the $pdf$ of $Y$ is given by $f_Y(y) = f_X(g^{-1}(y)) |\frac{dx}{dy}|$ for $y \in S_Y$ where the support of $Y$ is the set $S_Y = \{y = g(x): x\in S_X\}$. \\
+
+
+If $X$ and $Y$ are independent random variables, then $M_{X+Y} (t) = M_{X}(t)M_{Y}(t)$.\\
+If $X$ and $Y$ are independent random variables, then $\rho(X, Y) = 0$. \\
+If $X$ is a discrete random variable,  then mgf of $X$ is $M_{X}(t) = \sum P(X = k)e^{kt}$. \\
+If $X \sim Gamma(a_1,b)$ and $Y \sim Gamma(a_2,b)$, $X+Y \sim Gamma(a_1+a_2,b)$ if $X$ and $Y$ are independent. \\
+If $X \sim Gamma(a_1,b)$, then $cX\sim Gamma(a_1, cb)$. \\
+$X \sim Gamma(a,b)$, if $a=1$ then $X\sim exponential(b)$; if $b=2$ then $X\sim \chi_{(2a)}^2$. \\
+If $X_i \sim Laplace(\mu, b)$ then $\frac{2 \sum_{i=1}^n |X_i-\mu|}{b} \sim \chi^2(2n) $.\\
+If $X \sim Laplace(0, b)$ then $|X| ~ Exponential(b^{-1})$.\\
+If $X \sim Exp(\lambda)$ then $X \sim Gamma(1, \lambda)$.\\
+
+\end{description}
+
+%%%%%%%%%%%%%%%    
+    \begin{description}
+    		\item[Section 2] - Multivariate Distributions\\ %  \boldsymbol{}
+    		Covariance: $EX = \mu_1$, $EY = \mu_2$, $Cov(X, Y) = E(XY) - \mu_1\mu_2$, \\
+    		Correlation: $\rho = \frac{cov(X, Y)}{\sigma_1\sigma_2}$ \\
+    		$E(X_2) = E[E(X_2|X_1)]$, $Var(X_2) = E[Var(X_2|X_1)] + Var(E(X_2|X_1)) \geq Var(E(X_2|X_1))$.
+    		 
+		
+    		
+    \end{description}    
+
+
+\section{Statistical Inference}\smallskip \hrule height 1pt \smallskip
+
+%\subsection{Simple Linear Regression}
+
+\begin{description}
+\item[Inequalities] - Important Inequalities \\
+	\underline{Markov's Inequality}: u(X) non-negative, $E(u(X))$ exists, $P[u(X)\geq c] \leq \frac{E(u(X))}{c}$.\\ 
+	\underline{Chebyshev's Inequality}: $P(|X - \mu| \geq k\sigma) \leq \frac{1}{k^2}$
+\end{description}
+
+    \begin{description}
+        \item[Distributions]: \textbf{Some facts }\\
+        Sample mean: $\bar{X} = \frac{\sum X_i}{n}$ ,  Sample variance: $S^2 = \frac{\sum X_i^2 - n\bar{X}^2}{n-1}$, $E(S^2) = \sigma^2$; \\
+        $E(\bar{X}) = \mu$, $var(\bar{X}) = \frac{\sigma^2}{n}$, $\bar{X} \sim N(\mu, \sigma^2/n)$, $\frac{(n-1)S^2}{\sigma^2} \sim	\chi_{(n-1)}^2$, $\bar{X} \& S^2$ are indep.; \\
+        $\sum a_iX_i$ and $\sum b_iX_i$  are indep. iff $\sum a_ib_i = 0$;\\
+        $\frac{\sum (X_i - \mu )^2}{\sigma^2} = \frac{(n-1)S^2}{\sigma^2} + \frac{(\bar{X} - \mu)^2}{\sigma^2/n}$\\
+
+        %$\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1)$, $\frac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n-1)$, 
+         
+        %\item[Properties of SLR]
+    \end{description}
+ 
+
+    
+    \begin{description}
+    		\item[Order Statistics] - \textbf{Order Statistics}\\ %  \boldsymbol{}
+    		$g_k(y_k) = \dfrac{n!}{(k-1)!(n-k)!}[F(y_k)]^{k-1}[1-F(y_k)]^{n-k}f(y_k)$, $a< y_k <b$; 0 elsewhere.
+		
+    		
+    \end{description}   
+    
+    \begin{description}
+    		\item[Section 4] - \textbf{Confidence Interval Estimation}\\ %  \boldsymbol{}
+    		\underline{Error types}: Type I - reject $H_0$ while $H_0$ is true, $P_{\theta}(X\in R)$; Type II - fail to reject $H_0$ while $H_0$ is false. \\
+    		\underline{Level of significance}: the probability of making type I error - reject $H_0$ when $H_0$ is true. \\ 
+    		\underline{Power function}: $K(\theta) = P_{\theta}[(X_1, X_2, ..., X_n) \in C | \theta]$,  $\theta \in \omega_1$. In other words,  the power of a hypothesis test is the probability of rejecting $H_0$ when $H_a$  is true. \\
+    		\underline{Level of significance} : $\alpha =  max_{\theta	\in \omega_0} K(\theta)$ \\
+    		\underline{CI for difference in Means}: $X_i \overset{iid} \sim N(\mu_1, \sigma^2)$, $Y_i \overset{iid} \sim N(\mu_2, \sigma^2)$, where $\sigma^2$ is unknown. $S_p^2 = \frac{(n-1)S_1^2 + (m-1)S_2^2}{n+m-2}$, $\frac{(\bar{X} - \bar{Y}) - (\mu_1 - \mu_2)}{\sqrt{S_p^2(\frac{1}{n} + \frac{1}{m})}} \sim T(n+m-2)$. \\
+    		
+    		
+    \end{description}   
+    
+   \begin{description}  %%%  \overset{P}{\rightarrow}   %%%
+	\item[Section 5] - \textbf{Consistency and Limiting Distributions} \\
+	\underline{Convergence in Probability}: $X_n \overset{P}{\rightarrow} X$ if for every $\epsilon > 0$, $lim_{n\rightarrow\infty} P(|X_n - X| \geq \epsilon) = 0$  or ($lim_{n\rightarrow\infty} P(|X_n - X| < \epsilon) = 1$ ).\\
+	\underline{Degenerate r.v.}: $p(x) = 1, if\ x=a; p(x) = 0,\ if\ x\neq a$ and $F(x) = 0\ if\ x<a; F(x) = 1\ if\ x\geq a$. We write $X_b \overset{P}{\rightarrow}  a$. \\
+	\underline{Consistency}: The statistic $T_n$ is a consistent estimator for $\theta$ iff $T_n \overset{P}{\rightarrow} \theta$. \\
+	\underline{Convergence in Distribution}: $X_n \overset{D}{\rightarrow} X$ iff $lim_{n\rightarrow \infty} F_n(x) = F(x)$. F(x) is said to be the limiting distribution or asymptotic distribution of X; \\
+	\underline{Theorem 5.2.10}: Suppose $X_n$ has m.g.f. $M_{X_n}(t)$ that exists for $-h\leq x \leq h$ for all $n$. Let $X$ has m.g.f. $M(t)$ which exists for $|t|\leq h_1 \leq h$. If $lim_{n\rightarrow \infty} M_{X_n}(t) = M(t)$ for $|t| \leq h_1$, then $X_n \overset{D}{\rightarrow} X$. \\
+	\underline{m.g.f technique}: (1). $lim_{n\rightarrow \infty} (1 + \frac{b}{n} + \frac{\phi (n)}{n})^{cn} = lim_{n\rightarrow \infty} (1+\frac{b}{n})^{cn} = e^{bc}$ where $b$ and $c$ are constants and $lim_{n\rightarrow \infty} \phi(n) = 0$. (2). $e^x = 1 + x + \frac{x^2}{2} + ... + \frac{x^m}{m!} + ...$; \\
+	\underline{CLT}: $X_1, X_2, ..., X_n \overset{iid}{\sim} f(x)$ with mean $\mu$ and variance $\sigma^2$, $y_n = \frac{\bar{X} - \mu }{\sigma / \sqrt{n}} \overset{D}{\rightarrow} z$, where $z \sim N(0, 1)$. \\
+	
+	
+   \end{description} 
+   
+   	\begin{description}  %%% \overset{iid}{\sim} 
+   		\item[Section 6] - \textbf{Maximum Likelihood Estimation }\\
+   		\underline{Consistent}: If there is a unique solution to the likelihood equation $\frac{\partial}{\partial \theta}L(\theta) = 0$, then $\hat{\theta} \overset{P}{\rightarrow} \theta	$ ($\hat{\theta}$ is consistent for $\theta$).\\
+   		\underline{Score function}: $\frac{\partial ln(f(x; \theta))}{\partial \theta}$;\\
+   		\underline{Fisher Information}: $I(\theta)= var(\frac{\partial ln(f(x; \theta))}{\partial \theta}) = -E(\frac{\partial^2 ln(f(x; \theta))}{\partial \theta^2})$;\\
+   		\underline{Efficient}: $y$ is unbiased for $\theta$, $y$ is efficient for $\theta$ iff $var(y) = [nI(\theta)]^{-1}$. In general, $var(y) \geq [nI(\theta)]^{-1}$ where $y$ is unbiased for $\theta$. \\
+   		\underline{Efficiency}: The efficiency of an unbiased estimator is given by the ratio $\frac{RCLB}{var(\hat{\theta})}$, where $RCLB = [nI(\theta)]^{-1}$. \\
+   		\underline{Relative Efficiency}: Relative efficiency of $\hat{\theta}_1$ to $\hat{\theta}_2$ is $\frac{var(\hat{\theta}_2)}{var(\hat{\theta}_1)}$. \\
+   		\underline{Theorem 6.1.2}: Suppose $\hat{\theta}$ is the MLE of $\theta$ and $g(\theta)$ is a function of $\theta$. Then MLE of $g(\theta)$ is $\hat{g(\theta)} = g(\hat{\theta})$. \\
+   		\underline{Theorem 6.2.1 (Rao-Cramer Lower Bound)}: $X_1, X-2, ..., X_n \overset{iid}{\sim} f(x; \theta)$ for $\theta \in \Omega$. Let $y = u(X_1,X_2, ..., X_n)$ be a statistic with mean $E(Y) = k(\theta)$. Then $var(Y) \geq \frac{[k'(\theta)]^2}{nI(\theta)}$. \\
+   		\underline{MVUE}: $\hat{\theta} = u(X_1, X_2, ..., X_n)$ is a minimum variance unbiased estimator for $\theta$  iff $E(\hat{\theta})$ and $var(\hat{\theta})$ is less than or equal to the variance of every other unbiased  estimator. \\
+   		\underline{Theorem}: If $\hat{\theta}$ is asymptotically unbiased for $\theta$ and $var(\hat{\theta}) \rightarrow 0$ as $n\rightarrow \infty$, then $\hat{\theta} \overset{P}{\rightarrow} \theta$. 
+	\end{description}      
+
+	\begin{description}
+		\item[Section 7] - \textbf{Measure of Quality of Estimators}\\
+		\underline{MVUE}: $\hat{\theta} = u(X_1, X_2, ..., X_n)$ is a minimum variance unbiased estimator for $\theta$ iff $E(\hat{\theta}) = \theta$ and $var(\hat{\theta})$ is less than or equal to the variance of every other unbiased estimator. Relative efficiency of MVUE to any other unbiased estimator must be $\geq 1$. MUVE would be consistent if $var(\hat{\theta}) \rightarrow 0$ as $n\rightarrow\infty$. \\
+		\underline{Sufficient Statistics}: Let $X_1, X_2, ..., X_n$ be a random sample from $f(x;\theta)$, $y_1 = u(X_1,X_2, ..., X_n)$ is sufficient for $\theta$ iff $\frac{\Pi(f(x_i;\theta))}{g_1(y_1;\theta)} = H(x_1, x_2, ..., x_n)$ where $g_1$ is a marginal pdf for $y_1$.\\
+		\underline{Factorization Theorem}: $y_1 = u(X_1, X_2,..., X_n)$ is sufficient for $\theta$ iff $\Pi_{i=1}^n f(x_i; \theta) = k_1(u_1(x_1, x_2, ..., x_n); \theta) k_2(x_1, x_2, ..., x_n)$ where $k_2(x_1, x_2, ..., x_n)$ does not depend on $\theta$. \\
+		\underline{Theorem 7.3.2}: $X_1, X_2, ..., X_n \overset{iid}{\sim} f(x; \theta)$. If a sufficient statistic $y_1 = u(X_1,X_2, ..., X_n)$ for $\theta$ exists and if an MLE $\hat{\theta}$ exists uniquely, then $\hat{\theta}$ is a function of $y_1$. \\
+		\underline{Theorem}: Suppose $y_1 = u(X_1,X_2, ..., X_n)$ is a sufficient statistic for $\theta$. Let $z = u(y_1)$ be a 1-to-1 transformation not involving $\theta$. $z$ is also sufficient for $\theta$. \\
+		\underline{Rao-Blackwell Theorem}: (1). $y_1 = u_1(x_1, x_2, ..., x_n)$ be sufficient for $\theta$; (2) $y_2 = u_2(x_1, x_2, ..., x_n)$ be unbiased for $\theta$; (3). $\phi(y_1) = E(y_2|y_1)$. Then, (1) $\phi(y_1)$ is a statistic; (2) $\phi(y_1)$ is a function of $y_1$ alone; (3) $\phi(y_1)$ is unbiased for $\theta$; (4). $\phi(y_1)$  has variance $< \sigma_{y_2}^2$. \\
+		\underline{Completeness}:  Suppose $Z \sim h(z; \theta)$, a member of a family of p.d.f's (p.m.f's): $\{h(z;\theta), \theta	\in \Omega \}$. If $E(u(z)) = 0, \forall \theta \in \Omega$ implies that $u(z) = 0$ except on a set of points that has probability 0 for each $h(z; \theta), \theta	\in \Omega$, then the family $\{h(z;\theta), \theta	\in \Omega \}$ is called a complete family of density (mass) functions. \\
+		\underline{Lehmann and Scheffe (MVUE)}: Let $Y_1 = u_1(X_1,X_2, ..., X_n)$ be sufficient for $\theta$ and $\{g_1(y_1, \theta): \theta	\in \Omega \}$ be a complete family of densities (or p.m.f's). If there is a function if $Y_1$ which is unbiased for $\theta	$, then this function of $Y_1$ is the unique MVUE for $\theta$. \\
+		\underline{Exponential Family}: $f(x; \theta) = exp\{p(\theta)k(x) + \delta (x) + q(x)\}$ where $\delta(x)$ dose not depend on $\theta$, $p(\theta)$ is nontrivial continuous, $k'(x) \neq 0$.\\
+		$X_1,X_2, ..., X_n \overset{iid}{\sim} f(x; \theta)$, a regular case of exponential class with $y_1 = \sum k(x_i)$. Then, (1) $g_1(y_1; \theta) = R(y_1)exp\{p(\theta)y_1 + nq(\theta)\}$; (2) $E(y_1) = -n\frac{q'(\theta)}{p'(\theta)}$; (3) $var(y_1) = n\frac{1}{[p'(\theta)]^3}\{p"(\theta)q'(\theta) - q"(\theta)p'(\theta)\}$ \\
+		\underline{Theorem 7.5.2}: $X_1,X_2, ..., X_n \overset{iid}{\sim} f(x; \theta)$, a regular case of exponential class with $\Omega = \{\theta: \gamma < \theta < \delta \}$, $y_1 = \sum	k(x_i)$ is sufficient for $\theta$ and the family $\{g_1(y_1; \theta): \gamma < \theta< \delta \}$ is complete. \\
+		\underline{Theorem 7.4.1}: $X_1, X_2, ..., X_n$, a random sample from $f(x;\theta)$, $y_1 = u_1(X_1, X_2, ..., X_n)$ complete sufficient for $\theta$ and  $E(\phi(y_1)) = \alpha(\theta)$, then $\phi(y_1)$ is unique MVUE for $\alpha(\theta)$.\\
+		 
+	\end{description}	  
+	
+	
+	\begin{description}
+		\item[Section 8] \textbf{Most powerful tests }\\
+		\underline{Neyman-Pearson Theorem}: A best c.r. of size $\alpha$ for testing $H_0: \theta = \theta '$ v.s $H_1: \theta = \theta "$ (both simple) is such that \\
+		(1) $\dfrac{L(\theta ' ; x_1, x_2, ..., x_n)}{L(\theta " ; x_1, x_2, ..., x_n)}\leq k$ for each $(x_1, x_2, ..., x_n) \in C$\\
+		(2) $\dfrac{L(\theta ' ; x_1, x_2, ..., x_n)}{L(\theta " ; x_1, x_2, ..., x_n)}\geq k$ for each $(x_1, x_2, ..., x_n) \in C^c$\\
+		(3) $P((x_1, x_2, ..., x_n) \in C; H_0) = \alpha$ \\
+		\underline{Uniformly Most Powerful Test}: C is a uniformly most powerful critical region of size $\alpha$ if C is a best critical region of size $\alpha$ for testing $H_0$ against each simple hypothesis in $H_1$. \\
+		\underline{Likelihood Ratio Test}: $\Lambda = \frac{L(\hat{\omega})}{L(\hat{\Omega})} = \frac{max_{\theta \in \Theta_0}L(\theta)}{max_{\theta \in \Theta } L(\theta)}$ \\
+		\underline{Neyman-Pearson Lamma}: If a critical value is chosen so that $P_{\theta_0}(\Lambda \leq c) = \alpha$, then the test with decision rule \\
+		\begin{center}
+		Reject $\theta = \theta_0$ in favor of $\theta = \theta_1$ when $\Lambda \leq c$
+		\end{center}
+		is a uniformly most powerful test of size $\alpha$.
+	\end{description}	  
+    
+\end{multicols}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
