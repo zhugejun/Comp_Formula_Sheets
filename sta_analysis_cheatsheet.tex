@@ -148,7 +148,8 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
     $SST = \sum	(Y_i - \bar{Y}_i)^2 = \sum	(Y_i - \hat{Y}_i)^2 + \sum	(\hat{Y}_i - \bar{Y}_i)^2 = SSE + SSR$\\
     If $var(Y_i) = \sigma^2$, and $Y_i's$ are uncorrelated, then $Cov(\sum	a_iY_i, \sum	b_iY_i) = \sigma^2\sum a_ib_i$. \\
     $B_1$ and $\bar{Y}$ are uncorrelated, $Cov(B_1, \bar{Y}) = 0$ because $Cov(B_1, \bar{Y}) = Cov(\sum k_i Y_i, \sum \frac{1}{n}Y_i) = \frac{\sigma^2}{n} \sum	k_i = 0$. \\
-     
+    Confidence intervals tell you about how well you have determined the mean. Prediction intervals tell you where you can expect to see the next data point sampled. \\
+     %
     
     \begin{description}
     \item[ANOVA Table] - Analysis of variance for simple linear regression \\
@@ -163,7 +164,7 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
         \end{center}
 \end{description}
     Under $H_0: \beta_1=0$, $F^* = \frac{MSR}{MSE}\sim F_{1,n-2}$. $R^2 = \frac{SSR}{SST} = 1-\frac{SSE}{SST}$. $B_1 = r\sqrt{\frac{S_{yy}}{S_{xx}}}$. \\
-    E(MSR) = $\sigma^2 + \beta_1^2S_{xx}$, SSR = $B_1^2S_{xx}$, $E(MSE) = E(\frac{SSE}{n-2} = \frac{\sigma^2}{n-1}E(\frac{SSE}{\sigma^2}) = \sigma^2$\\
+    E(MSR) = $\sigma^2 + \beta_1^2S_{xx}$, SSR = $B_1^2S_{xx}$, $E(MSE) = E(\frac{SSE}{n-2}) = \frac{\sigma^2}{n-1}E(\frac{SSE}{\sigma^2}) = \sigma^2$\\
     Studentized residuals: $E_i^* = \frac{E_i}{\sqrt{\hat{V(E_i)}}}$ 
     
 %%% assumptions ...    
@@ -173,7 +174,7 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
     		\item Linearity: No curvature in the residual plot; (high-order, log/square)
     		\item Independence: $\epsilon_i \overset{iid}{\sim} N(0, \sigma^2)$;
     		\item Normality of error: QQ plot; (GLM, poisson regression...)
-    		\item Equal Variance: standardized residual inside [-3, 3]. (weighted obs)
+    		\item Equal Variance: standardized residual inside [-3, 3]. (weighting obs)
     \end{itemize}
     \end{description}
 
@@ -205,11 +206,14 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
 %%%%%%%%%%%%%%%    
     \begin{description}
     		\item[Multiple Regression] - Multiple regression \\ %  \boldsymbol{}
-    		$\boldsymbol{Y} = X\beta+\boldsymbol{\epsilon}$, where $\epsilon \sim MN(\boldsymbol{0}, \sigma^2I)$. \\    		
-		\underline{\textit{FWER}} - Bonferroni and Holm. Bonferroni: compare p-value with $\alpha / g$; Holm: sort p-values and multiple g, g-1, ..., 1 in order and compare with $\alpha$ finally. \\
+    		$\boldsymbol{Y} = X\beta+\boldsymbol{\epsilon}$, where $\epsilon \sim MN(\boldsymbol{0}, \sigma^2I)$. \\    	
+    		$df(SSE) = n-p$, where $p$ is the number of parameters; $df(SSTo) = n-1$, $df(SSR) = p-1$.  Reject $H_0$ if $f^* =  \frac{MSR}{MSE} > F_{1-\alpha; p-1, n-p}$. $R^2 = 1-\dfrac{SSE}{SSTo}$, adjusted $R^2 = 1 - (\frac{n-1}{n-p}) \frac{SSE}{SSTo}$\\
+    		CI: $b_1 \pm t_{1-\alpha/2, n-p} \cdot s_{b_1}$, Bonferroni CI:  $b_1 \pm t_{1-\alpha/2g, n-p} \cdot s_{b_1}$\\	
+		\underline{\textit{FWER}} - Bonferroni and Holm. Bonferroni: compare p-value with $\alpha / g$, CL = $1-\alpha / g$, where $g$ is the number of tests; Holm: sort p-values and multiple g, g-1, ..., 1 in order and compare with $\alpha$ finally. \\
+		%Bonferroni Corrected (1 - $\alpha$) x 100 \% Confidence Intervals: 
 		$SSTo = SSR(X_1) + SSE(X_1) = SSR(X_1, X_2) + SSE(X_1, X_2)$, where $SSR(X_1, X_2) = SSR(X_1) + SSR(X_2|X_1)$, $SSE(X_1,  X_2) = SSE(X_2) - SSR(X_1|X_2)$.\\
 		In general,  $SSR(X_q, X_{q+1},..., X_{p-1}|X_1, X_2,...,X_{q-1}) = SSE(X_1, X_2,...,X_{q-1}) - SSE(X_1, X_2, ...,X_{p-1}) = SSE_R - SSE_F$.\\
-		\underline{Partial F-test}: $H_0: \beta_q = \beta_{q+1} = ... = \beta_{p-1} = 0$, $H_a$: At least one $\beta_k \neq 0,\ k = q, q+1, .., p-1$. Test statistic $F^* = \dfrac{\frac{SSE_R - SSE_F}{df_R - df_F}}{MSE_F} = \dfrac{\frac{SSR(X_q, X_{q+1}, ..., X_{p-1} | X_1, X_2, ..., X_{q-1})}{p-q}}{\frac{SSE(X_1, X_2, ..., X_{p-1})}{n-p}} $. If $H_0$ is true, then $F^* \sim F_{p-q, n-p}$.\\
+		\underline{\textit{Partial F-test (Reduced vs. Full)}}: $H_0: \beta_q = \beta_{q+1} = ... = \beta_{p-1} = 0$, $H_a$: At least one $\beta_k \neq 0,\ k = q, q+1, .., p-1$. Test statistic $F^* = \dfrac{\frac{SSE_R - SSE_F}{df_R - df_F}}{MSE_F} = \dfrac{\frac{SSR(X_q, X_{q+1}, ..., X_{p-1} | X_1, X_2, ..., X_{q-1})}{p-q}}{\frac{SSE(X_1, X_2, ..., X_{p-1})}{n-p}} $. If $H_0$ is true, then $F^* \sim F_{p-q, n-p}$.\\
 		\underline{\textit{coefficient of partial determination}} is the proportion of the variation in Y "explained" by an indep. variable when other indep. variables are in the model. \\
 		$R_{Y1|2}^2 = \frac{SSE(X_2) - SSE(X_1, X_2)}{SSE(X_2)} = \frac{SSR(X_1|X_2)}{SSE(X_2)} = 1 - \frac{SSE(X_1, X_2)}{SSE(X_2)}$ \\
 		$R_{Y1|2,3,4} = 1 - \frac{SSE(X_1, X_2, X_3, X_4)}{SSE(X_2, X_3, X_4)}$\\
@@ -228,9 +232,9 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
 	\underline{\textit{Leverage}}: A measure of how unusual an X is. (diagonal values of Hat matrix, $\sum h_{ii} = tr(H) = tr[X(X'X)^{-1}X'] = tr[X'X(X'X)^{-1}] = tr[I_{p\times p}] = p$) \\
 	\underline{\textit{Influence}}: An influence point is its exclusive causes substantial changes to the fitted data. Just because a point has high leverage doesn't mean it has high influence. \\
 	Measures of influence include: \\
-	$DFFITS_i = \frac{\hat{Y}_i - \hat{Y}_i(i)}{\sqrt{MSE_{(i)}h_{ii}}}$ \\
-	Cook's Distance = $\frac{e_i^2}{pMSE}[\frac{h_{ii}}{(1-h_{ii})^2}]$ \\
-	$DFBETAS_{k(i)} = \frac{b_k - b_{k(i)}}{\sqrt{MSE_{(i)}c_{kk}}}$ where $c_{kk}$ is  $(k+1)^{th}$ diagonal in $(X'X)^{-1}$.
+	$DFFITS_i = \frac{\hat{Y}_i - \hat{Y}_i(i)}{\sqrt{MSE_{(i)}h_{ii}}}$ - a measure of an observation on its own fitted value. \\
+	Cook's Distance = $\frac{e_i^2}{pMSE}[\frac{h_{ii}}{(1-h_{ii})^2}]$ - a measure of influence of observation $i$ on all the fitted value. \\
+	$DFBETAS_{k(i)} = \frac{b_k - b_{k(i)}}{\sqrt{MSE_{(i)}c_{kk}}}$ where $c_{kk}$ is  $(k+1)^{th}$ diagonal in $(X'X)^{-1}$ -  a measure of the influence of observation $i$ on the parameter estimate $b_k$. It measures the difference b/w the parameter with / without observation $i$. 
 	
 \end{description}
     
@@ -245,6 +249,7 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
     \item[Model] one factor with $a\geq 2$ levels. $H_0: \mu_1 = \mu_2, ..., = \mu_a$ or $\hat{\tau_i} = 0$.
     \begin{itemize}
          \item $y_{ij} = \mu + \tau_i + \epsilon_{ij}, i=1,2,...,a, j=1,2,...,n_j$, $\epsilon_{ij}\sim N(0,\sigma^2)$;
+         \item $y_{i.} = \sum_j y_{ij}$, $E(y_{ij}) = \mu_i$, $var(y_{ij}) = \sigma^2$;
     		\item LSE estimator $\hat{\mu} + \hat{\tau}_i = \bar{y}_{i.}$,  if $\sum n_i\hat{\tau}_i = 0$ or $\hat{\mu = 0}$ or $\hat{\tau}_a=0$;
     		\item $MS_{trt} = \frac{SS_{trt}}{a-1} =\frac{\sum_{i=1}^a n_i (\bar{y}_i - \bar{y}_{..})^2}{a-1}$, $MS_E = \frac{SSE}{N-a} = \frac{\sum_{i=1}^a \sum_{j=1}^{n_i} (y_{ij} - \bar{y}_{i.})}{N-a}$;
     		\item $E(MS_E)=\sigma^2$, $E(MS_{trt}) = \sigma^2 + \frac{\sum_{i=1}^a n_i \tau_i^2}{a-1}$, $S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}$;
@@ -293,20 +298,37 @@ Compiled by Gejun Zhu (zhug3@miamioh.edu) in preparation for the analysis compre
             \end{tabular}
         \end{center}
         $E(MS_{trt}) = \sigma^2 + \frac{b\sum \tau_i^2}{a-1}$, $E(MS_{blk}) = \sigma^2 + \frac{a \sum \beta_j^2}{b-1}$, $E(MSE) = \sigma^2$\\
-        $F_0 = MSE/MS_{trt}$, p-value = $P(F_{a-1, (a-1)(b-1)} > F_0)$.\\
+        $F_0 = MS_{trt}/MSE$, p-value = $P(F_{a-1, (a-1)(b-1)} > F_0)$.\\
         $Q_i = y_{i.} - \dfrac{1}{k} \sum_j n_{ij}y_{.j}$, $\hat{\tau_i} = \dfrac{kQ_i}{\lambda a}$, $\hat{\mu} = \dfrac{y_{..}}{N} = \dfrac{y_{..}}{bk}$, $LSMean(\mu_i) = \hat{\mu} + \hat{\tau}_i$
 	\end{description}
 	
 	
-\subsection{$2^k$ Factorial Designs}
+\subsection{Factorial Designs}
 	\begin{description}
 	\item[Model] $Y_{ijk} = \mu + \tau_i + \beta_j + (\tau \beta)_{ij} + \epsilon_{ijk}, \ i = 1,2,...,a, j = 1,2,..., b, k = 1,2, ..., n$\\
 	$\sum \tau = 0$, $\sum	\beta = 0$, $\sum_i (\tau \beta)_{ij}  = 0$, $\sum_j (\tau \beta)_{ij}  = 0$ \\ 
 	$\hat{\mu} = \bar{y}_{...}$, $\hat{\tau}_i = \bar{y}_{i..} - \bar{y}_{...}$, $\hat{\beta}_j = \bar{y}_{.j.} - \bar{y}_{...}$, $\hat{\tau \beta}_{ij} = \bar{y}_{ij.} - \bar{y}_{i..} - \bar{y}_{.j.} + \bar{y}_{...}$\\
+	$\mu_{i.} = \mu + \tau_i = $mean of $ith$ level of A; $\mu_{.j} = \mu + \beta_j = $mean of $jth$ level of B; $\mu_{ij} = \mu + \tau_i + \beta_j + (\mu \beta)_{ij}= $mean of $ijth$ treatment. \\ 
+	$E(\hat{\mu}) = E(\bar{Y}_{...}) = \mu$, $var(\hat{\mu}) = \frac{\sigma^2}{abn}$; \\ 
+		   \begin{center}
+            \begin{tabular}{r|cc}
+                \textbf{Source}  & \textbf{DF} & \textbf{Sum of squares}  \\ 
+                \hline
+                \textbf{Treatments} & $ab-1$ & $\frac{1}{n} \sum_i \sum_j y_{ij.}^2 - \frac{(y_{...})^2}{abn}$ \\
+                \textbf{A} & $a-1$ & $\frac{1}{bn} \sum_i y_{i..}^2 - \frac{(y_{...})^2}{abn}$ \\
+                \textbf{B} & $b-1$ & $\frac{1}{an} \sum_j y_{.j.}^2 - \dfrac{(y_{...})^2}{abn}$ \\
+                \textbf{AB} & $(a-1)(b-1)$ & $SS_T - SS_A - SS_B$ \\
+                \textbf{Error} & $ab(n-1)$ & $SS_T - SS_{trts}  = \sum_i \sum_j \sum_k (y_{ijk} - \bar{y}_{ij.})^2$ \\
+                \hline
+                \textbf{Total} & $abn-1$ & $\sum_i \sum_j \sum_k y_{ijk}^2 - \frac{(y_{...})^2}{abn}$ \\
+            \end{tabular}
+        \end{center}	
 	Overall test: $\mu_{11} = \mu_{12} = ... = \mu_{ab}$, test statistic $F_0 = \frac{MS_{trt}}{MSE}$; \\
-	Interaction test: $(\alpha\beta)_{ij} = 0$ for all $ij$, test statistic $F_0 = \frac{MS_{AB}}{MSE}$.
-	
+	Interaction test: $(\alpha\beta)_{ij} = 0$ for all $ij$, test statistic $F_0 = \frac{MS_{AB}}{MSE}$.\\
+	sample size: $\delta^2 = \frac{nb\Delta^2}{2\sigma^2}$, assuming 2 levels of A differ by $\Delta$; $\delta^2 = \frac{n\Delta^2}{2\sigma^2}$ from the interaction terms. 
 	\end{description}
+	
+\subsection{$2^k$ Factorial Designs}
 
 \subsection{Two-level Fractional Factorial Designs}
 \begin{description}
@@ -322,6 +344,7 @@ $2^{k-p}$ terms, $2^p$ alias.\\
 \item[Model] $Y_{ij} = \mu + \tau_i + \epsilon_{ij},\ i = 1,2,...,a; j = 1, 2,..., n_i$, where $\tau_i$  are assumed to be independent $N(0, \sigma_{\tau}^2)$ random variables. \\ 
 $H_0: \sigma_{\tau}^2 = 0$ vs. $H_a: \sigma_{\tau}^2 > 0$, test stat: $F_0 = \frac{MS_{trt}}{MSE}$, $F_0 \sim F_{a-1,N-a}$ under $H_0$. \\
 \underline{Some facts}: $Y_{ij} \sim N(\mu , \sigma_{\tau}^2+\sigma^2)$ (1) if $i\neq k$ - different treatment levels, $Cov(Y_{ij}, Y_{kj}) = 0$ since $\tau_i$ and $\tau_k$ are independent and $E(\tau_i\tau_k) = E(\tau_i)E(\tau_k) = 0$; (2) if $k \neq l$ - same treatment different obs, $Cov(Y_{ij}, Y_{kj}) = \sigma_{\tau}^2$. \\
+\underline{two-way random model}: $Cov(Y_{ijk}, Y_{ijk'}) = \sigma_{\tau}^2 + \sigma_{\beta}^2 + \sigma_{\tau \beta}^2$ if $k \neq k'$; $Cov(Y_{ijk}, Y_{ij'k}) = \sigma_{\tau}^2$ if $j \neq j'$. \\
 $E(MSE) = \sigma^2$, $E(MS_{trt}) = \sigma^2 + n_0\sigma_{\tau}^2$ where $n_0 = n$ if all $n_i = n$ and $n_0 = \frac{1}{a-1}[N-\frac{\sum n_i^2}{N}]$.\\
 Estimates: $\hat{\sigma}^2 = MSE$ and $\hat{\sigma}_{\tau}^2 = \frac{MS_{trt} - MSE}{n_0}$.\\
 Confidence interval for $\frac{\sigma_{\tau}^2}{\sigma_{\tau}^2 + \sigma^2}$: $\frac{MS_{trts} / (n\sigma_{\tau}^2 + \sigma^2)}{MS_E / \sigma^2} \sim F_{a-1,N-a}$, $(F_{1-\alpha/2, a-1, N-a} \leq \frac{MS_{trts}}{MS_E} \frac{\sigma^2}{n\sigma_{\tau}^2 + \sigma^2} \leq F_{\alpha /2, a-1, N-a}) = 1 - \alpha$, $P(L\leq \frac{\sigma_{\tau}^2}{\sigma^2} \leq U) = 1-\alpha$, $L = \frac{1}{n} (\frac{MS_{trts}}{MS_E} \frac{1}{F_{\alpha/2, a-1, N-a}} - 1)$, $U = \frac{1}{n} (\frac{MS_{trts}}{MS_E} \frac{1}{F_{1 - \alpha/2, a-1, N-a}} - 1)$, $\frac{L}{L+1} \leq \frac{\sigma_{\tau}^2}{\sigma_{\tau}^2 + \sigma^2} \leq \frac{U}{1+U}$\\
@@ -337,15 +360,21 @@ Expected mean squares: $E(MS_A) = \sigma^2 + n\sigma_{\tau \beta}^2 + bn\sigma_{
 Expected mean squares: $E(MSE) = \sigma^2$, $E(MS_A) = \sigma^2 + n\sigma_{\tau\beta}^2 + bn\frac{\sum \tau_i}{a-1}$, $E(MS_B) = \sigma^2 + n\sigma_{\tau\beta}^2 + an\sigma_\beta^2$, $E(MS_{AB}) = \sigma^2 + n\sigma_{\tau\beta}^2$\\
 Variance components estimates: $\hat{\sigma}^2 = MSE$, $\hat{\sigma}_{\tau\beta}^2 = \frac{MS_{AB} - MSE}{n}$, $\hat{\sigma}_{\beta}^2 = \frac{MS_{B} - MS_{AB}}{an}$ \\
 Hypothesis Tests: (1) $H_0: \sigma_{\tau\beta}^2 = 0$ vs. $H_a: \sigma_{\tau\beta}^2 > 0$ using $F = \frac{MS_{AB}}{MSE}$; (2) $H_0: \sigma_{\beta}^2 = 0$ vs. $H_a: \sigma_{\beta}^2 > 0$ using $F = \frac{MS_{B}}{MS_{AB}}$; (3) $H_0: \tau_i = 0$ vs. $H_a: not\ H_0$ using $F = \frac{MS_{A}}{MS_{AB}}$. \\
-Approximate F-test: degree of freedom $\nu = \frac{(\sum c_i MS_i)^2}{\sum \frac{c_i^2 MS_i^2}{\nu_i}}$
+Approximate F-test: degree of freedom $\nu = \frac{(\sum c_i MS_i)^2}{\sum \frac{c_i^2 MS_i^2}{\nu_i^2}}$
 \end{description}
 
 \subsection{Nested Designs}
 
 \begin{description}
 \item[Model] $Y_{ijk} = \mu + \tau_i + \beta_{j(i)} +  \epsilon_{ijk},\ i = 1,2,...,a; j = 1, 2,...,b, k= 1,2,...,n$. \\
-A random; B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 + \sigma_\tau^2$ if $i=m, j=n, k\neq o$; $Cov(Y_{ijk}, Y_{mno}) =  \sigma_\tau^2$ if $i=m, j\neq n$; $Cov(Y_{ijk}, Y_{mno}) = 0$ if $i\neq m$; \\
-A fixed; B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 $ if $i=m, j=n$; $0$ otherwise.
+Crossed vs. nested factors: Two factors are considered crossed if every level of one factor occurs with every level of the other factor. In two factor design, one factor is nested with another when the levels of one factor are different within each level of the other factor. \\
+If fixed: $\sum \tau_i = 0$, $\sum \beta_{j(i)} = 0$ for all $i$.\\
+If random: $\beta_{j(i)} \sim N(0, \sigma_{\beta}^2)$, $\tau_i \sim N(0, \sigma_{\tau}^2)$, independent;\\
+If mixed ($\tau$ is fixed, and $\beta$ is random): $\sum \tau_i = 0$, $\beta_{j(i)} \sim N(0, \sigma_{\beta}^2)$, independent.\\
+$SSE = \sum_i \sum_j \sum_k (Y_{ijk} - \bar{Y}_{ij.})^2$ with $df = N-ab$\\
+$SS_{B(A)} = n\sum_i \sum_j (\bar{Y}_{ij.} - \bar{Y}_{i..})^2$ with $df = a(b-1)$ \\
+A random, B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 + \sigma_\tau^2$ if $i=m, j=n, k\neq o$; $Cov(Y_{ijk}, Y_{mno}) =  \sigma_\tau^2$ if $i=m, j\neq n$; $Cov(Y_{ijk}, Y_{mno}) = 0$ if $i\neq m$; \\
+A fixed, B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 $ if $i=m, j=n$; $0$ otherwise.
 \end{description}
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -353,79 +382,56 @@ A fixed; B(A) random: $Cov(Y_{ijk}, Y_{mno}) = \sigma_\beta^2 $ if $i=m, j=n$; $
 %%%%%%%%%%%%%%%%%%%%%%%
 \section{Generalized Linear Models}\smallskip \hrule height 2pt \smallskip
 \subsubsection*{Textbook 1}
-\begin{enumerate}
-\item \noindent An othognoal matrix $C_{k\times k}$ has the property $C'C=CC'=I$,
-i.e. $C'=C^{-1}$. The eigenvalues of $A_{k\times k}$ are the same
-as $C'AC$. 
-\item \noindent $P$ and $Q$ are nonsingular, then $rank\left(AQ\right)=rank\left(PA\right)=rank\left(A\right)$. 
-\item \noindent $A{}_{n\times n}$, symmetric, then $\textbf{x}_{i}'\textbf{x}_{j}=0$
-for $i\ne j$. $P_{n\times n}$ nonsingular, then $Tr\left(P^{-1}AP\right)=Tr\left(A\right)$. 
-\item \noindent $A{}_{n\times n}$, symmetric, then $A$ can be factorized
-as $A=P\textbf{\ensuremath{\Lambda}}P^{-1}$, where $\textbf{\ensuremath{\Lambda}}_{ii}=\lambda_{i}$,
-$P$ is an orthogonal matrix, i.e. $PP'=I$.
-\item \noindent $A{}_{n\times n}$, symmetric, idempotent, then $r\left(A\right)=tr\left(A\right)=r\left(P'AP\right)=tr\left(P'AP\right)$. 
-\item $z=a'Y$, $\frac{\partial z}{\partial Y}=a$; $z=Y'Y$, $\frac{\partial z}{\partial Y}=2Y$;
-$z=Y'AY$, $\frac{\partial z}{\partial Y}=AY+A'Y$.
-\item $E\left(Y\right)=\mu$, $E\left(a'Y\right)=a'E\left(Y\right)=a'\mu$;
-$V\left(Y\right)=V$, $V\left(a'Y\right)=a'V\left(Y\right)a$, $V\left(AY\right)=AV\left(Y\right)A'$.
-\item $E\left(Y'AY\right)=tr\left(AV\right)+\mu'A\mu$.
-\item If $Y_{k\times1}\sim N\left(\mu,I\right)$, then $Y'Y\sim\chi_{k,\lambda=\frac{1}{2}\left(\mu'\mu\right)}^{2}$.
-\item $Y_{n\times1}\sim N\left(\mu,I\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$
-with $k=r\left(A\right),$ $\lambda=\frac{1}{2}\left(\mu'A\mu\right)$
-iff $A=A^{2}$.
-\item $Y_{n\times1}\sim N\left(\mu,\sigma^{2}I\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$
-with $k=r\left(A\right),$ $\lambda=\frac{1}{2\sigma^{2}}\left(\mu'A\mu\right)$
-iff $A=A^{2}$.
-\item $Y_{n\times1}\sim N\left(\mu,V\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$
-with $k=r\left(AV\right)=r\left(A\right),$ $\lambda=\frac{1}{2}\left(\mu'A\mu\right)$
-iff $AV=\left(AV\right)^{2}$.
-\item $Y_{n\times1}\sim N\left(\mu,V\right)$, then $Y'V^{-1}Y\sim\chi_{k,\lambda}^{2}$,
-with $k=n,\ \lambda=\frac{1}{2}\left(\mu'V^{-1}\mu\right)$.
-\item $Y_{n\times1}\sim N\left(\mu,V\right)$, then $AY$ and $BY$ are
-independent iff $AVB'=0$.
-\item $Y_{n\times1}\sim N\left(\mu,V\right)$, $A_{n\times n}=A'$, $B_{m\times n}$,
-then $Y'AY$ and $BY$ are independent iff $BVA=0$.
-\item $Y_{n\times1}\sim N\left(\mu,V\right)$, $A_{n\times n}=A'$, $B_{n\times n}=B'$,
-then $Y'AY$ and $Y'BY$ are independent iff $AVB=0$.
-\item $B=\left(X'X\right)^{-1}XY$, $\hat{Y}=XB=X\left(X'X\right)^{-1}XY=HY$,
-$E\left(B\right)=\beta$, $var\left(B\right)=\sigma^{2}\left(X'X\right)^{-1}$,
-$E\left(\hat{Y}\right)=X\beta$, $var\left(\hat{Y}\right)=\sigma^{2}H$.
-\item $SSE=Y'\left(I-H\right)Y$ with $df=n-p$, $SSR=Y'\left(H-\frac{1}{n}J\right)Y$
-with $df=p-1$ , $SST=Y'\left(I-\frac{1}{n}\right)Y$ with $df=n-1$. 
-\item If $Y=X\beta+\epsilon$, $\epsilon\sim N\left(0,\sigma^{2}I\right)$,
-then $B=\left(X'X\right)^{-1}XY\sim N\left(\beta,\sigma^{2}\left(X'X\right)^{-1}\right)$. 
-\item $\dfrac{\left(n-p\right)s^{2}}{\sigma^{2}}=\dfrac{\left(n-p\right)MSE}{\sigma^{2}}=\dfrac{SSE}{\sigma^{2}}=\dfrac{1}{\sigma^{2}}Y'\left(I-H\right)Y\sim\chi_{n-p}^{2}$.
-\item $B$ and $\dfrac{SSE}{\sigma^{2}}$ are independent. 
-\item $\dfrac{b_{j}-\beta_{j}}{\sqrt{var\left(b_{j}\right)}}=\dfrac{b_{j}-\beta_{j}}{\sigma\sqrt{c_{jj}}}\sim N\left(0,1\right)$
-,$c_{jj}$ is $jth$ diag entry of $\left(X'X\right)^{-1}$.
-\item $\dfrac{\left(b_{j}-\beta_{j}\right)/\left(\sigma\sqrt{c_{jj}}\right)}{\sqrt{\frac{SSE}{\sigma^{2}}/\left(n-p\right)}}\sim t_{n-p}$ $\Rightarrow$ $b_{j}\pm t_{n-p}\sqrt{MSEc_{xx}}$
-\item $LB\sim N\left(L\beta,\sigma^{2}L\left(X'X\right)^{-1}L'\right)$.
-\item Let $M=\left(LB\right)'\left(\sigma^{2}\left(L\left(X'X\right)^{-1}L'\right)^{-1}\right)^{-1}\left(LB\right)\sim\chi_{r,\lambda}^{2}$,
-where $\lambda=\dfrac{1}{2\sigma^{2}}\left(LB\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(LB\right)$.
-\item $E\left(M\right)=r\sigma^{2}+\left(L\beta\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(L\beta\right)$
-\item $F^{*}=\dfrac{\left(Lb\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(Lb\right)/r}{\frac{SSE}{\sigma^{2}}/\left(n-p\right)}=\dfrac{MSQ}{MSE}\sim F_{r,n-p}$
-under $H_{0}:L\beta=0$.
-\item $\dfrac{SSR}{\sigma^{2}}\sim\chi_{p,\lambda}^{2}$, where $\lambda=\dfrac{1}{2\sigma^{2}}\beta'\left(X'X\right)\beta$.
-\item $MSQ\left(L\beta\right)=\left(LB\right)'\left(\sigma^{2}\left(L\left(X'X\right)^{-1}L'\right)^{-1}\right)^{-1}\left(LB\right)=\dfrac{SSR}{\sigma^{2}}$.
-\item $A=X\left(X'X\right)^{-1}X'-X_{2}\left(X_{2}'X_{2}\right)^{-1}X_{2}'$
-is idempotent; $r\left(A\right)=r$.
-\end{enumerate}
+An othognoal matrix $C_{k\times k}$ has the property $C'C=CC'=I$, i.e. $C'=C^{-1}$. The eigenvalues of $A_{k\times k}$ are the same as $C'AC$. \\
+$P$ and $Q$ are nonsingular, then $rank\left(AQ\right)=rank\left(PA\right)=rank\left(A\right)$. \\
+$A{}_{n\times n}$, symmetric, then $\textbf{x}_{i}'\textbf{x}_{j}=0$ for $i\ne j$. $P_{n\times n}$ nonsingular, then $Tr\left(P^{-1}AP\right)=Tr\left(A\right)$. \\
+$A{}_{n\times n}$, symmetric, then $A$ can be factorized as $A=P\textbf{\ensuremath{\Lambda}}P^{-1}$, where $\textbf{\ensuremath{\Lambda}}_{ii}=\lambda_{i}$, $P$ is an orthogonal matrix, i.e. $PP'=I$.\\
+$A{}_{n\times n}$, symmetric, idempotent, then $r\left(A\right)=tr\left(A\right)=r\left(P'AP\right)=tr\left(P'AP\right)$. \\
+$z=a'Y$, $\frac{\partial z}{\partial Y}=a$; $z=Y'Y$, $\frac{\partial z}{\partial Y}=2Y$; $z=Y'AY$, $\frac{\partial z}{\partial Y}=AY+A'Y$.\\
+$E\left(Y\right)=\mu$, $E\left(a'Y\right)=a'E\left(Y\right)=a'\mu$; $V\left(Y\right)=V$, $V\left(a'Y\right)=a'V\left(Y\right)a$, $V\left(AY\right)=AV\left(Y\right)A'$.\\
+$E\left(Y'AY\right)=tr\left(AV\right)+\mu'A\mu$.\\
+If $Y_{k\times1}\sim N\left(\mu,I\right)$, then $Y'Y\sim\chi_{k,\lambda=\frac{1}{2}\left(\mu'\mu\right)}^{2}$.\\
+$Y_{n\times1}\sim N\left(\mu,I\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$ with $k=r\left(A\right),$ $\lambda=\frac{1}{2}\left(\mu'A\mu\right)$ iff $A=A^{2}$.\\
+$Y_{n\times1}\sim N\left(\mu,\sigma^{2}I\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$ with $k=r\left(A\right),$ $\lambda=\frac{1}{2\sigma^{2}}\left(\mu'A\mu\right)$ iff $A=A^{2}$.\\
+$Y_{n\times1}\sim N\left(\mu,V\right)$, $A=A'$, then $Y'AY\sim\chi_{k,\lambda}^{2}$ with $k=r\left(AV\right)=r\left(A\right),$ $\lambda=\frac{1}{2}\left(\mu'A\mu\right)$ iff $AV=\left(AV\right)^{2}$.\\
+$Y_{n\times1}\sim N\left(\mu,V\right)$, then $Y'V^{-1}Y\sim\chi_{k,\lambda}^{2}$, with $k=n,\ \lambda=\frac{1}{2}\left(\mu'V^{-1}\mu\right)$.\\
+$Y_{n\times1}\sim N\left(\mu,V\right)$, then $AY$ and $BY$ are independent iff $AVB'=0$.\\
+ $Y_{n\times1}\sim N\left(\mu,V\right)$, $A_{n\times n}=A'$, $B_{m\times n}$, then $Y'AY$ and $BY$ are independent iff $BVA=0$.\\
+ $Y_{n\times1}\sim N\left(\mu,V\right)$, $A_{n\times n}=A'$, $B_{n\times n}=B'$, then $Y'AY$ and $Y'BY$ are independent iff $AVB=0$.\\
+ $B=\left(X'X\right)^{-1}XY$, $\hat{Y}=XB=X\left(X'X\right)^{-1}XY=HY$, $E\left(B\right)=\beta$, $var\left(B\right)=\sigma^{2}\left(X'X\right)^{-1}$, $E\left(\hat{Y}\right)=X\beta$, $var\left(\hat{Y}\right)=\sigma^{2}H$.\\
+ $SSE=Y'\left(I-H\right)Y$ with $df=n-p$, $SSR=Y'\left(H-\frac{1}{n}J\right)Y$ with $df=p-1$ , $SST=Y'\left(I-\frac{1}{n}\right)Y$ with $df=n-1$. \\
+ If $Y=X\beta+\epsilon$, $\epsilon\sim N\left(0,\sigma^{2}I\right)$, then $B=\left(X'X\right)^{-1}XY\sim N\left(\beta,\sigma^{2}\left(X'X\right)^{-1}\right)$. \\
+ $\dfrac{\left(n-p\right)s^{2}}{\sigma^{2}}=\dfrac{\left(n-p\right)MSE}{\sigma^{2}}=\dfrac{SSE}{\sigma^{2}}=\dfrac{1}{\sigma^{2}}Y'\left(I-H\right)Y\sim\chi_{n-p}^{2}$.\\
+ $B$ and $\dfrac{SSE}{\sigma^{2}}$ are independent. \\
+ $\dfrac{b_{j}-\beta_{j}}{\sqrt{var\left(b_{j}\right)}}=\dfrac{b_{j}-\beta_{j}}{\sigma\sqrt{c_{jj}}}\sim N\left(0,1\right)$ ,$c_{jj}$ is $jth$ diag entry of $\left(X'X\right)^{-1}$.\\
+ $\dfrac{\left(b_{j}-\beta_{j}\right)/\left(\sigma\sqrt{c_{jj}}\right)}{\sqrt{\frac{SSE}{\sigma^{2}}/\left(n-p\right)}}\sim t_{n-p}$ $\Rightarrow$ $b_{j}\pm t_{n-p}\sqrt{MSEc_{xx}}$\\
+ $LB\sim N\left(L\beta,\sigma^{2}L\left(X'X\right)^{-1}L'\right)$.\\
+ Let $M=\left(LB\right)'\left(\sigma^{2}\left(L\left(X'X\right)^{-1}L'\right)^{-1}\right)^{-1}\left(LB\right)\sim\chi_{r,\lambda}^{2}$, where $\lambda=\dfrac{1}{2\sigma^{2}}\left(LB\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(LB\right)$.\\
+ $E\left(M\right)=r\sigma^{2}+\left(L\beta\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(L\beta\right)$\\
+ $F^{*}=\dfrac{\left(Lb\right)'\left(L\left(X'X\right)^{-1}L'\right)^{-1}\left(Lb\right)/r}{\frac{SSE}{\sigma^{2}}/\left(n-p\right)}=\dfrac{MSQ}{MSE}\sim F_{r,n-p}$ under $H_{0}:L\beta=0$.\\
+ $\dfrac{SSR}{\sigma^{2}}\sim\chi_{p,\lambda}^{2}$, where $\lambda=\dfrac{1}{2\sigma^{2}}\beta'\left(X'X\right)\beta$.\\
+ $MSQ\left(L\beta\right)=\left(LB\right)'\left(\sigma^{2}\left(L\left(X'X\right)^{-1}L'\right)^{-1}\right)^{-1}\left(LB\right)=\dfrac{SSR}{\sigma^{2}}$.\\
+ $A=X\left(X'X\right)^{-1}X'-X_{2}\left(X_{2}'X_{2}\right)^{-1}X_{2}'$ is idempotent; $r\left(A\right)=r$.\\
 
 \subsubsection*{Textbook 2}
-\begin{enumerate}
-\item standardized residual $r_{i}=\dfrac{y_{i}-\hat{\mu}_{i}}{\hat{\sigma}}$.
-\item $f\left(y;\theta\right)=exp\left\{ a\left(y\right)b\left(\theta\right)+c\left(\theta\right)+d\left(y\right)\right\} $
-\item glm = exp family + link func (mono + diff)
-\item $E\left[a\left(y\right)\right]=-c'\left(\theta\right)/b\left(\theta\right)$
-\item $var\left[a\left(y\right)\right]=\dfrac{b''\left(\theta\right)c'\left(\theta\right)-c''\left(\theta\right)b'\left(\theta\right)}{\left[b'\left(\theta\right)\right]^{3}}$
-\item score info: $U=\frac{\partial l\left(\theta;y\right)}{\partial\theta}=a\left(y\right)b'\left(\theta\right)+c'\left(\theta\right)$
-\item $E\left(U\right)=0;$ $J=var\left(U\right)=-E\left(U'\right)=\dfrac{b''\left(\theta\right)c'\left(\theta\right)}{b'\left(\theta\right)}-c''\left(\theta\right)$
-\item $\dfrac{U-0}{\sqrt{J}}\sim N\left(0,1\right)$, $U'J^{-1}U=\dfrac{U^{2}}{J}\sim\chi^{2}\left(1\right)$
-\item wald statistic $\left(b-\beta\right)'J\left(b\right)\left(b-\beta\right)\sim\chi^{2}\left(p\right)$
-\item $\lambda=\dfrac{L\left(b_{max};y\right)}{L\left(b;y\right)}$, $b_{max}$/b,
-- MLE for saturated/reduced model
-\item $D=2\left[l\left(b_{max};y\right)-l\left(b;y\right)\right]$
-\item $AIC=-2l\left(\hat{\pi};y\right)+2p$; $BIC=-2l\left(\hat{\pi};y\right)+2p\times\left(\#\text{of obs}\right)$\end{enumerate}
+\vspace{-5pt}
+standardized residual $r_{i}=\dfrac{y_{i}-\hat{\mu}_{i}}{\hat{\sigma}}$. \\
+$f\left(y;\theta\right)=exp\left\{ a\left(y\right)b\left(\theta\right)+c\left(\theta\right)+d\left(y\right)\right\} $ \\
+glm = exp family + link func (mono + diff)  \\
+$E\left[a\left(y\right)\right]=-c'\left(\theta\right)/b\left(\theta\right)$ \\
+$var\left[a\left(y\right)\right]=\dfrac{b''\left(\theta\right)c'\left(\theta\right)-c''\left(\theta\right)b'\left(\theta\right)}{\left[b'\left(\theta\right)\right]^{3}}$ \\
+%$l(\theta; y) = a(y)b(\theta) + c(\theta) + d(y)$\\
+score info: $U=\frac{\partial ln[f\left(\theta;y\right)]}{\partial\theta}=a\left(y\right)b'\left(\theta\right)+c'\left(\theta\right)$ \\
+sampling dist of score statistics: $E\left(U\right)=0;$ $J=var\left(U\right)=-E\left(U'\right) = -E(\dfrac{\partial^2lnf(x;\theta)}{\partial \theta^2})=\dfrac{b''\left(\theta\right)c'\left(\theta\right)}{b'\left(\theta\right)}-c''\left(\theta\right)$ \\
+One parameter: $\dfrac{U-0}{\sqrt{J}} \sim N\left(0,1\right)$, $U'J^{-1}U=\dfrac{U^{2}}{J}\sim\chi_{(1)}^{2}$; for a vector of parameters: $U\sim MVN(0, J)$, then $U'J^{-1}U\sim \chi_p^2$.\\
+Approximate $l$ and $U$ with Taylor series: $l(\beta) = l(b) + (\beta - b)'U(b) - 1/2(\beta	- b)'J(b)(\beta	- b)$; $U(\beta	) = U(b) - J(b)(\beta - b)$. \\
+sampling dist of MLE's: $U(b) = 0$, $J^{-1}U \sim N(0, J^{-1})$, $(b - \beta)'J(b)(b - \beta) \sim \chi_p^2$. \\
+wald statistic $\left(b-\beta\right)'J\left(b\right)\left(b-\beta\right)\sim\chi^{2}\left(p\right)$\\
+GLiM: (1) response follows independent exponential family dist; (2) predictors $X's$ available; (3) g(): monotone differentiable link function.\\
+saturated model is a model with the maximum number of parameters that can be estimated. $\beta_{max}$ is the parameter for saturated model, $b_{max}$ is MLE for saturated model.	\\
+$\lambda=\dfrac{L\left(b_{max};y\right)}{L\left(b;y\right)}$, $b_{max}$/b, - MLE for saturated/reduced model \\
+Deviance: $D=2\left[l\left(b_{max};y\right)-l\left(b;y\right)\right]$ \\
+$AIC=-2l\left(\hat{\pi};y\right)+2p$; $BIC=-2l\left(\hat{\pi};y\right)+2p\times\left(\#\text{of obs}\right)$ \\
 
 \end{multicols}
 
